@@ -1,0 +1,68 @@
+<!-- Basic -->
+<ion-content [fullscreen]="true">
+
+  <ion-row *ngIf="preSelectList">
+    <ion-col size="2">Select:</ion-col>
+    <ion-col size="6">
+      <select class="select-class" (change)="onPreselectDDLChange($event)">
+        <option value="">select</option>
+        <option [value]="pre" *ngFor="let pre  of preSelectList; let i2 = index">{{pre}}</option>
+      </select>
+    </ion-col>
+
+  </ion-row>
+
+  <ion-accordion-group>
+    <ion-accordion value="colors">
+      <ion-item slot="header">
+        <ion-label>Colors</ion-label>
+      </ion-item>
+
+      <ion-list slot="content">
+        <ion-item>
+          <form class="form" [formGroup]="searchFilterForm">
+            <div formArrayName="search">
+              <ion-grid>
+                <ion-row *ngFor="let quantity of allSearch()?.controls; let i = index" [formGroupName]="i">
+                  <ion-col size="1">
+                    <ion-button (click)="removeRow(i)">&minus;</ion-button>
+                  </ion-col>
+                  <ion-col size="1">
+                    <ion-button (click)="addRow()">&plus;</ion-button>
+                  </ion-col>
+                  <ion-col size="3">
+                    <select class="select-class" formControlName="param1" (change)="onParam1Change(i)">
+                      <option value="">select</option>
+                      <option [value]="param1?.name" *ngFor="let param1 of searchData; let i1 = index">{{param1?.name}}
+                      </option>
+                    </select>
+                  </ion-col>
+                  <ion-col size="3">
+                    <select class="select-class" formControlName="param2">
+                      <option value="">select</option>
+                      <option [value]="p2.name" *ngFor="let p2  of param2List[i]; let i2 = index">{{p2.name}}</option>
+                    </select>
+                  </ion-col>
+                  <ion-col size="4" class="input">
+                    <ion-input clearInput class="input-box" formControlName="param3">
+                    </ion-input>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </div>
+          </form>
+
+        </ion-item>
+      </ion-list>
+    </ion-accordion>
+  </ion-accordion-group>
+  <ion-row>
+    <ion-col size="6">
+      <ion-input clearInput class="input-box" [(ngModel)]="searchParam"></ion-input>
+    </ion-col>
+
+    <ion-col size="6">
+      <ion-button [disabled]="!searchParam " (click)="savePreselectForm()">Save</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>

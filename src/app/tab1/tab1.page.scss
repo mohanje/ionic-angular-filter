@@ -1,0 +1,20 @@
+.input{
+    width: 100%;
+}
+.form{
+    width: 100%;
+}
+.item-native::part(native) {
+    border: none !important;    
+  }
+  .select-class {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #ccc;
+    height: 5vh;
+    border-radius: 6px;
+  }
+  ion-input {
+    border: 1px solid lightgray;
+    border-radius: 6px;
+  }

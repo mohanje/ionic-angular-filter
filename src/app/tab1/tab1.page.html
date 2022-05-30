@@ -1,68 +1,99 @@
 <!-- Basic -->
-<ion-content [fullscreen]="true">
 
-  <ion-row *ngIf="preSelectList">
-    <ion-col size="2">Select:</ion-col>
-    <ion-col size="6">
-      <select class="select-class" (change)="onPreselectDDLChange($event)">
-        <option value="">select</option>
-        <option [value]="pre" *ngFor="let pre  of preSelectList; let i2 = index">{{pre}}</option>
-      </select>
-    </ion-col>
+<ion-content [fullscreen]="true" class="content">
 
-  </ion-row>
 
-  <ion-accordion-group>
-    <ion-accordion value="colors">
+
+  <ion-accordion-group class="accordion-grp">
+
+    <ion-accordion value="colors" class="accordion">
       <ion-item slot="header">
-        <ion-label>Colors</ion-label>
+        <ion-label class="accordion-label">Filters</ion-label>
       </ion-item>
 
-      <ion-list slot="content">
-        <ion-item>
-          <form class="form" [formGroup]="searchFilterForm">
+      <ion-list slot="content" class="list">
+        <ion-row *ngIf="preSelectList.length > 0 else emptyList" class="search-row">
+          <ion-col size="4" class="search-select">Search Select:</ion-col>
+          <ion-col size="6">
+            <select class="select-class" (change)="onPreselectDDLChange($event)">
+              <option value="">select</option>
+              <option class="select-options" [value]="pre" *ngFor="let pre  of preSelectList; let i2 = index">{{pre}}
+              </option>
+            </select>
+          </ion-col>
+
+        </ion-row>
+        <ng-template #emptyList>
+          <ion-row>
+            <ion-col size="12">
+              <ion-text class="no-presets">
+                No saved Presests
+              </ion-text>
+            </ion-col>
+          </ion-row>
+        </ng-template>
+        <ion-row class="search-box">
+          <ion-col size="4" class="save-btn">
+            <ion-button *ngIf="allSearch()?.controls && allSearch()?.controls.length === 0" (click)="addRow(true)">Add
+              Filter</ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-grid class="form-wrapper" *ngIf="allSearch()?.controls?.length > 0">
+          <form class="" [formGroup]="searchFilterForm">
             <div formArrayName="search">
-              <ion-grid>
-                <ion-row *ngFor="let quantity of allSearch()?.controls; let i = index" [formGroupName]="i">
-                  <ion-col size="1">
-                    <ion-button (click)="removeRow(i)">&minus;</ion-button>
-                  </ion-col>
-                  <ion-col size="1">
-                    <ion-button (click)="addRow()">&plus;</ion-button>
-                  </ion-col>
-                  <ion-col size="3">
+              <ion-grid cdkDropList (cdkDropListDropped)="drop($event)" class="example-list">
+                <ion-row cdkDrag *ngFor="let quantity of allSearch()?.controls; let i = index" [formGroupName]="i"
+                  class="example-box">
+                  <ion-col size-xs="12" size-sm="4">
                     <select class="select-class" formControlName="param1" (change)="onParam1Change(i)">
-                      <option value="">select</option>
-                      <option [value]="param1?.name" *ngFor="let param1 of searchData; let i1 = index">{{param1?.name}}
+                      <option class="select-options" value="">select</option>
+                      <option class="select-options" [value]="param1?.name"
+                        *ngFor="let param1 of searchData; let i1 = index">{{param1?.name}}
                       </option>
                     </select>
                   </ion-col>
-                  <ion-col size="3">
+                  <ion-col size-xs="12" size-sm="4">
                     <select class="select-class" formControlName="param2">
-                      <option value="">select</option>
-                      <option [value]="p2.name" *ngFor="let p2  of param2List[i]; let i2 = index">{{p2.name}}</option>
+                      <option class="select-options" value="">select</option>
+                      <option class="select-options" [value]="p2.name"
+                        *ngFor="let p2  of param2List[i]; let i2 = index">{{p2.name}}</option>
                     </select>
                   </ion-col>
-                  <ion-col size="4" class="input">
+                  <ion-col size-xs="12" size-sm="4" class="input">
                     <ion-input clearInput class="input-box" formControlName="param3">
                     </ion-input>
                   </ion-col>
                 </ion-row>
+
               </ion-grid>
             </div>
           </form>
 
-        </ion-item>
+          <ion-item class="bcd" lines="none">
+            <ion-row class="abc">
+              <ion-col class="row-add">
+                <ion-button (click)="addRow()">Add Row</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-row class="save-row">
+              <ion-col size-xs="12" size-sm="5">
+                <ion-input clearInput class="input-box" placeholder="Enter search name" [(ngModel)]="searchParam">
+                </ion-input>
+              </ion-col>
+
+              <ion-col size-xs="6" size-sm="3" class="save-btn">
+                <ion-button [disabled]="searchParam?.length < 2" (click)="savePreselectForm()">Save</ion-button>
+              </ion-col>
+              <ion-col size-xs="6" size-sm="4" class="save-btn">
+                <ion-button (click)="clearFilter()">Clear Filter</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-grid>
       </ion-list>
     </ion-accordion>
   </ion-accordion-group>
-  <ion-row>
-    <ion-col size="6">
-      <ion-input clearInput class="input-box" [(ngModel)]="searchParam"></ion-input>
-    </ion-col>
-
-    <ion-col size="6">
-      <ion-button [disabled]="!searchParam " (click)="savePreselectForm()">Save</ion-button>
-    </ion-col>
-  </ion-row>
 </ion-content>

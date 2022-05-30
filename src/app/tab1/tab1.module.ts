@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import { Tab1PageRoutingModule } from './tab1-routing.module';
 
@@ -14,7 +15,8 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     FormsModule,
     ReactiveFormsModule,
     ExploreContainerComponentModule,
-    Tab1PageRoutingModule
+    Tab1PageRoutingModule,
+    DragDropModule
   ],
   declarations: [Tab1Page]
 })

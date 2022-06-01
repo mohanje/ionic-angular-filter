@@ -102,9 +102,10 @@ ion-accordion-group {
   text-align: center;
   margin-left: 2vh;
 }
-
+.clear-btn {
+  margin-bottom: 4vh;
+}
 .clear-btn::part(native) {
-  margin-bottom: 5vh;
   background: rgb(47, 214, 225);
 }
 .save::part(native){
@@ -217,4 +218,5 @@ ion-item:not(.item-label) .sc-ion-input-md-h {
 .delete-preset::part(native)  {
   background-color: red;
   color: white;
+  padding: 1rem;
 }

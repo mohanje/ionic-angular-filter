@@ -64,7 +64,6 @@ export class Tab1Page implements OnInit {
       ],
     },
   ];
-
   param2List = [];
   searchFilterForm: FormGroup;
   searchParam: '';
@@ -73,6 +72,7 @@ export class Tab1Page implements OnInit {
   updated: boolean = false;
   submitted: boolean;
   submittedForm: boolean;
+  selectBox: boolean = false;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -90,11 +90,14 @@ export class Tab1Page implements OnInit {
   }
 
   removeRow(index: number) {
+    debugger
     if (confirm('Do you want remove row?')) {
       this.allSearch().removeAt(index)
       this.UpdateSearchByRemoving(index)
+      // this.allSearch().clear();
     }
   }
+
   deletePreset() {
     let messageSpan = document.getElementById("message");
     const localData: any = localStorage.getItem("presetSearch");
@@ -112,11 +115,20 @@ export class Tab1Page implements OnInit {
             this.message = '';
           }, 3000)
         }
-
+        this.updatePreselectList();
+        this.allSearch().clear();
       }
     }
-    this.updatePreselectList();
-    this.allSearch().clear();
+    else {
+      messageSpan.style.color = 'red';
+      this.message = `${this.searchParam} is not present in preset list.`;
+      if (this.message) {
+        setTimeout(() => {
+          this.message = '';
+        }, 5000)
+      }
+
+    }
   }
 
   UpdateSearchByRemoving(index: any) {
@@ -126,7 +138,13 @@ export class Tab1Page implements OnInit {
     if (localJSON[this.searchParam]) {
       const temp1 = localJSON[this.searchParam]
       temp1.splice(index, 1)
-      localStorage.setItem("presetSearch", JSON.stringify(localJSON));
+      if (temp1.length > 0) {
+        localStorage.setItem("presetSearch", JSON.stringify(localJSON));
+      } else {
+        delete localJSON[this.searchParam];
+        localStorage.setItem("presetSearch", JSON.stringify(localJSON));
+      }
+      this.updatePreselectList();
       for (let i = 0; i < this.allSearch().length; i++) {
         this.onParam1Change(i);
       }
@@ -137,6 +155,7 @@ export class Tab1Page implements OnInit {
     const localData: any = localStorage.getItem("presetSearch");
     const localJSON = JSON.parse(localData);
     if (localJSON[this.searchParam]) {
+      this.selectBox = true;
       if (JSON.stringify(localJSON[this.searchParam]) !== JSON.stringify(this.allSearch().value)) {
         if (confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
           this.allSearch().clear();
@@ -219,8 +238,8 @@ export class Tab1Page implements OnInit {
         const temp1 = localJSON[this.searchParam]
         const temp2 = this.searchFilterForm.value.search;
         if (JSON.stringify(temp1) == JSON.stringify(temp2)) {
-          messageSpan.style.color = '#d7810b';
-          this.message = 'Your data is not modified.';
+          messageSpan.style.color = 'green';
+          this.message = 'Your Filter stored successfully';
           if (this.message) {
             setTimeout(() => {
               this.message = '';
@@ -278,28 +297,53 @@ export class Tab1Page implements OnInit {
 
   onPreselectDDLChange(e: any) {
     this.searchParam = e.target.value
-    this.clearFormArray()
-    const localData = localStorage.getItem("presetSearch");
-    if (localData && localData != "null") {
-      var localJSON = JSON.parse(localData);
-      const tempArray = [] as any[];
-      Object.keys(localJSON[e.target.value]).map((key: any, index: any) => {
-        const menu = this.searchData.find((f) => f.name.toLowerCase() === localJSON[e.target.value][index].param1.toLowerCase());
-        if (this.param2List && this.param2List.length > 0) {
-          this.param2List[index] = menu.subMenu
-        } else {
-          this.param2List.push(menu.subMenu)
-        }
-        tempArray.push({
-          param1: localJSON[e.target.value][key].param1,
-          param2: localJSON[e.target.value][key].param2,
-          param3: localJSON[e.target.value][key].param3,
-        });
-      });
-      tempArray.map(m => {
-        this.addSearch(m)
-      })
+
+    const changes = this.trackChanges(this.searchParam);
+    if (!changes && this.allSearch().controls.length > 0) {
+      if (!confirm("Do you want to discard the current filter changes")) {
+        return;
+      }
     }
+    
+
+    if(this.searchParam && this.searchParam !== 'Select') {
+      this.clearFormArray()
+      const localData = localStorage.getItem("presetSearch");
+      if (localData && localData != "null") {
+        var localJSON = JSON.parse(localData);
+        const tempArray = [] as any[];
+        Object.keys(localJSON[e.target.value]).map((key: any, index: any) => {
+          const menu = this.searchData.find((f) => f.name.toLowerCase() === localJSON[e.target.value][index].param1.toLowerCase());
+          if (this.param2List && this.param2List.length > 0) {
+            this.param2List[index] = menu.subMenu
+          } else {
+            this.param2List.push(menu.subMenu)
+          }
+          tempArray.push({
+            param1: localJSON[e.target.value][key].param1,
+            param2: localJSON[e.target.value][key].param2,
+            param3: localJSON[e.target.value][key].param3,
+          });
+        });
+        tempArray.map(m => {
+          this.addSearch(m)
+        })
+      }
+      else {
+        this.allSearch().clear();
+      }
+    }
+  }
+
+  trackChanges = (param: any) => {
+    const localData = localStorage.getItem("presetSearch");
+    var localJSON = JSON.parse(localData);
+    let data = localJSON[param];
+
+    if (JSON.stringify(data) !== JSON.stringify(this.allSearch().value)) {
+      return false
+    }
+    return true;
   }
 
 

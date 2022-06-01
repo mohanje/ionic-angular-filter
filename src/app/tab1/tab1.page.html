@@ -15,9 +15,9 @@
         <ion-row *ngIf="preSelectList.length > 0 else emptyList" class="search-row">
           <ion-col size="4" class="search-select">Search Select:</ion-col>
           <ion-col size="6">
-            <select class="select-class" (change)="onPreselectDDLChange($event)">
-              <option class="select-options" value="">select</option>
-              <option class="select-options" [value]="pre" *ngFor="let pre  of preSelectList; let i2 = index">{{pre}}
+            <select class="select-class" [value]="selectBox && 'Select'" (change)="onPreselectDDLChange($event)">
+              <option class="select-options">Select</option>
+              <option class="select-options" [value]="pre"  *ngFor="let pre  of preSelectList; let i2 = index">{{pre}}
               </option>
             </select>
           </ion-col>
@@ -50,7 +50,7 @@
                   </ion-col>
                   <ion-col size-xs="12" size-sm="">
                     <select class="select-class" formControlName="param1"
-                      [ngClass]="!allSearch().controls[i].get('param1').valid || submitted ? 'error' : ''"
+                      [ngClass]="!allSearch().controls[i].get('param1').valid ? 'error' : ''"
                       (change)="onParam1Change(i)">
                       <option class="select-options" value="">select</option>
                       <option class="select-options" [value]="param1?.name"
@@ -59,14 +59,14 @@
                     </select>
                   </ion-col>
                   <ion-col size-xs="12" size-sm="">
-                    <select class="select-class" formControlName="param2" [ngClass]="!allSearch().controls[i].get('param2').valid || submitted ? 'error' : ''">
+                    <select class="select-class" formControlName="param2" [ngClass]="!allSearch().controls[i].get('param2').valid ? 'error' : ''">
                       <option class="select-options" [value]="p2.name" *ngFor="let p2  of param2List[i];">
                         {{p2.name}}
                       </option>
                     </select>
                   </ion-col>
                   <ion-col size-xs="12" size-sm="" class="input">
-                    <ion-input clearInput class="input-box" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid || submitted ? 'error' : ''">
+                    <ion-input clearInput class="input-box" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid ? 'error' : ''">
                     </ion-input>
                   </ion-col>
                 </ion-row>
@@ -88,7 +88,7 @@
           <ion-item lines="none">
             <ion-row class="save-row ion-align-items-center">
               <ion-col size-xs="12" size-sm="4">
-                <ion-input clearInput class="input-box" placeholder="Enter search name" [(ngModel)]="searchParam">
+                <ion-input clearInput class="input-box"  placeholder="Enter search name" [(ngModel)]="selectBox ? '' : searchParam">
                 </ion-input>
               </ion-col>
               <ion-col size-xs="4" size-sm="2" class="save-btn">

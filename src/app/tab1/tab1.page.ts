@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FilterModel } from '../interfaces/filterModel';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 @Component({
@@ -69,13 +69,17 @@ export class Tab1Page implements OnInit {
   searchFilterForm: FormGroup;
   searchParam: '';
   preSelectList = [];
+  message: string = '';
+  updated: boolean = false;
+  submitted: boolean;
+  submittedForm: boolean;
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
     this.initPriceForm()
     this.updatePreselectList()
   }
-
+  get f() { return this.searchFilterForm.controls; }
   addRow(flag?: boolean) {
     if (flag) {
       if (this.allSearch().controls.length > 0) return;
@@ -86,11 +90,65 @@ export class Tab1Page implements OnInit {
   }
 
   removeRow(index: number) {
-    this.allSearch().removeAt(index)
+    if (confirm('Do you want remove row?')) {
+      this.allSearch().removeAt(index)
+      this.UpdateSearchByRemoving(index)
+    }
+  }
+  deletePreset() {
+    let messageSpan = document.getElementById("message");
+    const localData: any = localStorage.getItem("presetSearch");
+    const localJSON = JSON.parse(localData);
+    if (localJSON[this.searchParam]) {
+      const temp1 = localJSON[this.searchParam]
+
+      if (confirm(`Are you sure to delete ${this.searchParam} preset.`)) {
+        delete localJSON[this.searchParam];
+        localStorage.setItem("presetSearch", JSON.stringify(localJSON));
+        messageSpan.style.color = 'green'
+        this.message = `'${this.searchParam}' is deleted successfully.`;
+        if (this.message) {
+          setTimeout(() => {
+            this.message = '';
+          }, 3000)
+        }
+
+      }
+    }
+    this.updatePreselectList();
+    this.allSearch().clear();
+  }
+
+  UpdateSearchByRemoving(index: any) {
+    const localData: any = localStorage.getItem("presetSearch");
+    const localJSON = JSON.parse(localData);
+
+    if (localJSON[this.searchParam]) {
+      const temp1 = localJSON[this.searchParam]
+      temp1.splice(index, 1)
+      localStorage.setItem("presetSearch", JSON.stringify(localJSON));
+      for (let i = 0; i < this.allSearch().length; i++) {
+        this.onParam1Change(i);
+      }
+    }
   }
 
   clearFilter() {
-    this.allSearch().clear();
+    const localData: any = localStorage.getItem("presetSearch");
+    const localJSON = JSON.parse(localData);
+    if (localJSON[this.searchParam]) {
+      if (JSON.stringify(localJSON[this.searchParam]) !== JSON.stringify(this.allSearch().value)) {
+        if (confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
+          this.allSearch().clear();
+        }
+      } else {
+        this.allSearch().clear();
+      }
+    } else {
+      if (confirm("Do you want to clear your unsaved changes to filter")) {
+        this.allSearch().clear();
+      }
+    }
   }
 
 
@@ -102,9 +160,10 @@ export class Tab1Page implements OnInit {
 
   newEvent(item?): FormGroup {
     return this.fb.group({
-      param1: [item?.param1],
-      param2: [item?.param2],
-      param3: [item?.param3],
+      param1: [item?.param1, [Validators.required,]],
+      param2: [{ value: item?.param2, disabled: item?.param2 ? false : true }, [Validators.required]],
+      param3: [{ value: item?.param3, disabled: item?.param3 ? false : true }, [Validators.required]],
+
     });
   }
 
@@ -118,27 +177,36 @@ export class Tab1Page implements OnInit {
 
   addSearch(item) {
     this.allSearch().push(this.newEvent(item));
-
   }
 
   clearFormArray() {
     (this.searchFilterForm.controls['search'] as FormArray)?.clear();
   }
 
-  onParam1Change(i) {
+  onParam1Change(i: any) {
     const row = this.allSearch().controls[i] as FormGroup
     const menu = this.searchData.find(f => f.name.toLowerCase() === row.get('param1').value.toLowerCase())
+    row.get('param2').enable()
+    row.get('param3').enable()
     if (this.param2List && this.param2List.length > 0) {
       this.param2List[i] = menu.subMenu
     } else {
       this.param2List.push(menu.subMenu)
     }
+    row.get('param2').markAllAsTouched()
+    row.get('param2').markAsDirty()
+    row.get('param2').setValue(this.param2List[i][0].name)
   }
-  
+
+  getClass(form: any, key: any) {
+    return this
+  }
+
   savePreselectForm() {
+    this.submitted = true;
     let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[];
-    console.log(this.checkIfPresetModified(filterData, this.searchParam));
     let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
+    let messageSpan = document.getElementById("message");
     let isModified = true;
     if (every) {
       var localJSON = {};
@@ -150,26 +218,29 @@ export class Tab1Page implements OnInit {
       if (localJSON[this.searchParam]) {
         const temp1 = localJSON[this.searchParam]
         const temp2 = this.searchFilterForm.value.search;
-
         if (JSON.stringify(temp1) == JSON.stringify(temp2)) {
-          alert('Your data is not modified.');
+          messageSpan.style.color = '#d7810b';
+          this.message = 'Your data is not modified.';
+          if (this.message) {
+            setTimeout(() => {
+              this.message = '';
+            }, 3000)
+          }
           return
-
         } else {
-           isModified = confirm("You updating the current filter: " + this.searchParam + " Please confirm")
+          isModified = confirm("Your are updating the current filter: " + this.searchParam + " Please confirm");
         }
-
       }
 
       if (this.preSelectList.includes(this.searchParam)) {
-        if(isModified) {
-          if (confirm("Name already exists. Are you sure?")) {
-            filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-            const finalData = { [this.searchParam]: this.searchFilterForm.value.search };
-  
-            localStorage.setItem("presetSearch", JSON.stringify({ ...localJSON, ...finalData }));
-            this.updatePreselectList()
-          }
+        if (isModified) {
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          const finalData = { [this.searchParam]: this.searchFilterForm.value.search };
+
+          localStorage.setItem("presetSearch", JSON.stringify({ ...localJSON, ...finalData }));
+          this.updatePreselectList()
+          messageSpan.style.color = 'green'
+          this.message = "Your filter updated successfully.";
         }
       }
       else {
@@ -178,11 +249,17 @@ export class Tab1Page implements OnInit {
 
         localStorage.setItem("presetSearch", JSON.stringify({ ...localJSON, ...finalData }));
         this.updatePreselectList()
-        alert('Your Filter stored successfully.');
+        this.message = this.updated ? 'Filter updated successfully.' : 'Your Filter stored successfully.';
+        if (this.message) {
+          setTimeout(() => {
+            this.message = '';
+          }, 3000)
+        }
       }
     }
     else {
-      alert('All field are mandatory.');
+      messageSpan.style.color = 'red'
+      this.message = 'All fields are mandatory.';
     }
   }
 
@@ -219,7 +296,6 @@ export class Tab1Page implements OnInit {
           param3: localJSON[e.target.value][key].param3,
         });
       });
-      // setAddRow(tempArray);
       tempArray.map(m => {
         this.addSearch(m)
       })
@@ -235,26 +311,4 @@ export class Tab1Page implements OnInit {
     this.onParam1Change(event.currentIndex)
     this.onParam1Change(event.previousIndex)
   }
-
-  checkIfPresetModified(filters: FilterModel[], name: string) {
-    // let flag:boolean = false;
-    // const localData:any = JSON.stringify(localStorage.getItem('presetSearch'));
-    // if(localData){
-    //   for (const key in localData) {  
-    //     if(name == key && filters &&  filters?.length == localData[key]?.length){
-    //      filters.forEach((f,i)=>{
-    //        if(f.param1 != localData[key][i].param1 && f.param2 != localData[key][i].param2 && f.param3 != localData[key][i].param3){
-    //          return true;
-    //        }else{
-    //          flag = false;
-    //        }
-    //      })
-    //     }else{
-    //       return true;
-    //     }
-    //   }
-    // }
-
-  }
-
 }

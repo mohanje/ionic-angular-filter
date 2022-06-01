@@ -16,7 +16,7 @@
           <ion-col size="4" class="search-select">Search Select:</ion-col>
           <ion-col size="6">
             <select class="select-class" (change)="onPreselectDDLChange($event)">
-              <option value="">select</option>
+              <option class="select-options" value="">select</option>
               <option class="select-options" [value]="pre" *ngFor="let pre  of preSelectList; let i2 = index">{{pre}}
               </option>
             </select>
@@ -45,23 +45,28 @@
               <ion-grid cdkDropList (cdkDropListDropped)="drop($event)" class="example-list">
                 <ion-row cdkDrag *ngFor="let quantity of allSearch()?.controls; let i = index" [formGroupName]="i"
                   class="example-box">
-                  <ion-col size-xs="12" size-sm="4">
-                    <select class="select-class" formControlName="param1" (change)="onParam1Change(i)">
+                  <ion-col size-xs="12" size-sm="1">
+                    <ion-button class="update" (click)="removeRow(i)">&minus;</ion-button>
+                  </ion-col>
+                  <ion-col size-xs="12" size-sm="">
+                    <select class="select-class" formControlName="param1"
+                      [ngClass]="!allSearch().controls[i].get('param1').valid || submitted ? 'error' : ''"
+                      (change)="onParam1Change(i)">
                       <option class="select-options" value="">select</option>
                       <option class="select-options" [value]="param1?.name"
                         *ngFor="let param1 of searchData; let i1 = index">{{param1?.name}}
                       </option>
                     </select>
                   </ion-col>
-                  <ion-col size-xs="12" size-sm="4">
-                    <select class="select-class" formControlName="param2">
-                      <option class="select-options" value="">select</option>
-                      <option class="select-options" [value]="p2.name"
-                        *ngFor="let p2  of param2List[i]; let i2 = index">{{p2.name}}</option>
+                  <ion-col size-xs="12" size-sm="">
+                    <select class="select-class" formControlName="param2" [ngClass]="!allSearch().controls[i].get('param2').valid || submitted ? 'error' : ''">
+                      <option class="select-options" [value]="p2.name" *ngFor="let p2  of param2List[i];">
+                        {{p2.name}}
+                      </option>
                     </select>
                   </ion-col>
-                  <ion-col size-xs="12" size-sm="4" class="input">
-                    <ion-input clearInput class="input-box" formControlName="param3">
+                  <ion-col size-xs="12" size-sm="" class="input">
+                    <ion-input clearInput class="input-box" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid || submitted ? 'error' : ''">
                     </ion-input>
                   </ion-col>
                 </ion-row>
@@ -77,18 +82,24 @@
               </ion-col>
             </ion-row>
           </ion-item>
+          <ion-col size-xs="8" size-sm="4" class="clear-filter">
+            <ion-button (click)="clearFilter()" class="clear-btn">Clear Filter</ion-button>
+          </ion-col>
           <ion-item lines="none">
-            <ion-row class="save-row">
-              <ion-col size-xs="12" size-sm="5">
+            <ion-row class="save-row ion-align-items-center">
+              <ion-col size-xs="12" size-sm="4">
                 <ion-input clearInput class="input-box" placeholder="Enter search name" [(ngModel)]="searchParam">
                 </ion-input>
               </ion-col>
-
-              <ion-col size-xs="6" size-sm="3" class="save-btn">
-                <ion-button [disabled]="searchParam?.length < 2" (click)="savePreselectForm()">Save</ion-button>
+              <ion-col size-xs="4" size-sm="2" class="save-btn">
+                <ion-button [disabled]="searchParam?.length < 1 || !allSearch().valid" (click)="savePreselectForm()" class="save">
+                  Save</ion-button>
               </ion-col>
-              <ion-col size-xs="6" size-sm="4" class="save-btn">
-                <ion-button (click)="clearFilter()">Clear Filter</ion-button>
+              <ion-col class="error-col" size-xs="4" size-sm="3">
+                <ion-text><span class="message" id="message">{{message}}</span></ion-text>
+              </ion-col>
+              <ion-col size-xs="4" size-sm="3" class="save-btn">
+                <ion-button class="delete-preset" (click)="deletePreset()">Delete Preset</ion-button>
               </ion-col>
             </ion-row>
           </ion-item>

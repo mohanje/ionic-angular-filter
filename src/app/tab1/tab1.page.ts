@@ -72,7 +72,7 @@ export class Tab1Page implements OnInit {
   updated: boolean = false;
   submitted: boolean;
   submittedForm: boolean;
-  selectBox: boolean = false;
+  presetSelected:string = '';
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -90,11 +90,10 @@ export class Tab1Page implements OnInit {
   }
 
   removeRow(index: number) {
-    debugger
     if (confirm('Do you want remove row?')) {
       this.allSearch().removeAt(index)
       this.UpdateSearchByRemoving(index)
-      // this.allSearch().clear();
+
     }
   }
 
@@ -103,10 +102,9 @@ export class Tab1Page implements OnInit {
     const localData: any = localStorage.getItem("presetSearch");
     const localJSON = JSON.parse(localData);
     if (localJSON[this.searchParam]) {
-      const temp1 = localJSON[this.searchParam]
+      const temp1 = localJSON[this.searchParam];
 
       if (confirm(`Are you sure to delete ${this.searchParam} preset.`)) {
-        this.selectBox = true;
         delete localJSON[this.searchParam];
         localStorage.setItem("presetSearch", JSON.stringify(localJSON));
         messageSpan.style.color = 'green'
@@ -153,22 +151,29 @@ export class Tab1Page implements OnInit {
   }
 
   clearFilter() {
+
     const localData: any = localStorage.getItem("presetSearch");
     const localJSON = JSON.parse(localData);
-    this.selectBox = true;
+
     if (localJSON[this.searchParam]) {
+
       if (JSON.stringify(localJSON[this.searchParam]) !== JSON.stringify(this.allSearch().value)) {
         if (confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
           this.allSearch().clear();
+          this.searchParam = ''
         }
       } else {
         this.allSearch().clear();
+        this.searchParam = ''
       }
     } else {
       if (confirm("Do you want to clear your unsaved changes to filter")) {
         this.allSearch().clear();
+        this.searchParam = ''
       }
     }
+    this.presetSelected = ''
+
   }
 
 
@@ -195,7 +200,7 @@ export class Tab1Page implements OnInit {
     return this.searchFilterForm.get('search') as any;
   }
 
-  addSearch(item) {
+  addSearch(item: any) {
     this.allSearch().push(this.newEvent(item));
   }
 
@@ -224,6 +229,11 @@ export class Tab1Page implements OnInit {
 
   savePreselectForm() {
     this.submitted = true;
+
+    if (!this.allSearch().valid) {
+      return;
+    }
+
     let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[];
     let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
     let messageSpan = document.getElementById("message");
@@ -270,6 +280,7 @@ export class Tab1Page implements OnInit {
         localStorage.setItem("presetSearch", JSON.stringify({ ...localJSON, ...finalData }));
         this.updatePreselectList()
         this.message = this.updated ? 'Filter updated successfully.' : 'Your Filter stored successfully.';
+        this.searchParam = '';
         if (this.message) {
           setTimeout(() => {
             this.message = '';
@@ -278,7 +289,7 @@ export class Tab1Page implements OnInit {
       }
     }
     else {
-      messageSpan.style.color = 'red'
+      messageSpan.style.color = 'red';
       this.message = 'All fields are mandatory.';
     }
   }
@@ -298,16 +309,27 @@ export class Tab1Page implements OnInit {
 
   onPreselectDDLChange(e: any) {
     this.searchParam = e.target.value
-
     const changes = this.trackChanges(this.searchParam);
-    if (!changes && this.allSearch().controls.length > 0) {
+    if (!changes) {
       if (!confirm("Do you want to discard the current filter changes")) {
-        return;
+        return
       }
     }
-    
+    // const localData = localStorage.getItem("presetSearch");
+    // var localJSON = JSON.parse(localData);
+    // let data = localJSON[this.searchParam];
+    // debugger
 
-    if(this.searchParam && this.searchParam !== 'Select') {
+    // if (!changes && this.allSearch().controls.length > 0 && this.allSearch().controls.length !== data.length) {
+    //   if (!confirm("Do you want to discard the current filter changes")) {
+    //     return;
+    //   }
+    // }
+
+    // if ()
+
+
+    if (this.searchParam && this.searchParam !== 'Select') {
       this.clearFormArray()
       const localData = localStorage.getItem("presetSearch");
       if (localData && localData != "null") {
@@ -341,8 +363,14 @@ export class Tab1Page implements OnInit {
     var localJSON = JSON.parse(localData);
     let data = localJSON[param];
 
-    if (JSON.stringify(data) !== JSON.stringify(this.allSearch().value)) {
+    if (!data) {
       return false
+    }
+
+    if (data.length === this.allSearch().controls.length) {
+      if (JSON.stringify(data) !== JSON.stringify(this.allSearch().value)) {
+        return false
+      }
     }
     return true;
   }

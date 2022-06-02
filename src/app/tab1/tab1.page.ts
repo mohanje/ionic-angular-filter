@@ -106,6 +106,7 @@ export class Tab1Page implements OnInit {
       const temp1 = localJSON[this.searchParam]
 
       if (confirm(`Are you sure to delete ${this.searchParam} preset.`)) {
+        this.selectBox = true;
         delete localJSON[this.searchParam];
         localStorage.setItem("presetSearch", JSON.stringify(localJSON));
         messageSpan.style.color = 'green'
@@ -154,8 +155,8 @@ export class Tab1Page implements OnInit {
   clearFilter() {
     const localData: any = localStorage.getItem("presetSearch");
     const localJSON = JSON.parse(localData);
+    this.selectBox = true;
     if (localJSON[this.searchParam]) {
-      this.selectBox = true;
       if (JSON.stringify(localJSON[this.searchParam]) !== JSON.stringify(this.allSearch().value)) {
         if (confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
           this.allSearch().clear();

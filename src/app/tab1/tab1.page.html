@@ -13,7 +13,8 @@
           <ion-col size="6">
             <select class="select-class" [(ngModel)]="presetSelected" (change)="onPreselectDDLChange($event)">
               <option class="select-options" value="" selected>Select</option>
-              <option class="select-options" [value]="pre" *ngFor="let pre  of preSelectList; let i2 = index">{{pre}}
+              <option class="select-options" [value]="pre?.id" *ngFor="let pre  of preSelectList; let i2 = index">
+                {{pre?.filterName}}
               </option>
             </select>
           </ion-col>
@@ -47,24 +48,74 @@
                   <ion-col size-xs="12" size-sm="">
                     <select class="select-class" formControlName="param1"
                       [ngClass]="(!allSearch().controls[i].get('param1').valid && submitted) ? 'error' : ''"
-                      (change)="onParam1Change(i)">
-                      <option class="select-options" value="">select</option>
+                      (change)="onParam1Change(i)" onchange="">
+                      <option class="select-options" value="" selected>select</option>
                       <option class="select-options" [value]="param1?.name"
-                        *ngFor="let param1 of searchData; let i1 = index">{{param1?.name}}
+                        *ngFor="let param1 of searchData; let i= index">{{param1?.name}}
+
                       </option>
                     </select>
                   </ion-col>
                   <ion-col size-xs="12" size-sm="">
-                    <select class="select-class" formControlName="param2"
-                      [ngClass]="!allSearch().controls[i].get('param2').valid && submitted ? 'error' : ''">
+                    <select class="select-class" formControlName="param2" onselect=""
+                      [ngClass]="!allSearch().controls[i].get('param2')?.valid && submitted ? 'error' : ''">
                       <option class="select-options" [value]="p2.name" *ngFor="let p2  of param2List[i];">
                         {{p2.name}}
                       </option>
                     </select>
                   </ion-col>
-                  <ion-col size-xs="12" size-sm="" class="input">
-                    <ion-input clearInput class="input-box" formControlName="param3"
+                  <ion-col size-xs="12" size-sm="" class="input-wrapper">
+
+                    <ion-input clearInput type="date" class="input-box" formControlName="param3"
+                      [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
+                      *ngIf="isDate">
+                    </ion-input>
+
+                    <ion-input clearInput type="text" class="input-box" formControlName="param3"
+                      [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
+                      *ngIf="!isDate">
+                    </ion-input>
+
+
+
+
+                    <!-- <mat-form-field class="mat-form">
+                      <mat-label>Enter a date range</mat-label>
+                      <mat-date-range-input [rangePicker]="picker" class="date-input">
+                        <input matStartDate matInput placeholder="Start date">
+                        <input matEndDate matInput placeholder="End date">
+                      </mat-date-range-input>
+                      <mat-datepicker-toggle matSuffix [for]="picker" class="toggle"></mat-datepicker-toggle>
+                      <mat-date-range-picker #picker class="range-picker"></mat-date-range-picker>
+                    </mat-form-field> -->
+
+                    
+
+                    <!-- <ion-input clearInput type="date" class="input-box" formControlName="param3"
+                    [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''" *ngIf="!(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">
+                  </ion-input>
+                  
+                  <ion-input clearInput type="text" class="input-box" formControlName="param3"
+                    [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''" *ngIf="!(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">
+                  </ion-input> -->
+
+                    <!-- <ion-datetime locale="in-IN" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''" *ngIf="(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')"></ion-datetime> -->
+                  </ion-col>
+
+                  <!-- <ion-col size-xs="12" size-sm="" class="input">
+                      <ion-input clearInput type="text" class="input-box" formControlName="param3"
+                      [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''"  *ngIf=" searchData" >
+                    </ion-input> -->
+                  <!-- <ion-input clearInput type="date" class="input-box" formControlName="param3"
                       [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''">
+                    </ion-input> -->
+
+                  <!-- <ion-datetime locale="in-IN" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''"></ion-datetime> -->
+                  <!-- </ion-col> -->
+                  <ion-col size-xs="12" size-sm="" class="input">
+                    <ion-input clearInput type="text" class="input-box" formControlName="param3"
+                      [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
+                      *ngIf="(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">
                     </ion-input>
                   </ion-col>
                 </ion-row>
@@ -79,9 +130,19 @@
               </ion-col>
             </ion-row>
           </ion-item>
-          <ion-col size-xs="8" size-sm="4" class="clear-filter">
-            <ion-button (click)="clearFilter()" class="clear-btn">Clear Filter</ion-button>
-          </ion-col>
+
+          <ion-item>
+            <ion-row class="btn-group">
+              <ion-col size-xs="6" size-sm="6" class="clear-filter">
+                <ion-button (click)="clearFilter()" class="clear-btn">Clear Filter</ion-button>
+              </ion-col>
+              <ion-col size-xs="6" size-sm="6" class="apply-filter">
+                <ion-button (click)="applyFilter()" class="apply-btn">Apply Filter</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+
+
           <ion-item lines="none">
             <ion-row class="save-row ion-align-items-center">
               <ion-col size-xs="12" size-sm="4">

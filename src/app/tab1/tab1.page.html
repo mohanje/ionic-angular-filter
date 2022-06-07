@@ -8,6 +8,7 @@
       </ion-item>
 
       <ion-list slot="content" class="list">
+
         <ion-row *ngIf="preSelectList.length > 0 else emptyList" class="search-row">
           <ion-col size="4" class="search-select">Search Select:</ion-col>
           <ion-col size="6">
@@ -36,7 +37,8 @@
           </ion-col>
         </ion-row>
 
-        <ion-grid class="form-wrapper" *ngIf="allSearch()?.controls?.length > 0">
+        <ion-grid class="form-wrapper" style="overflow: overlay; height: 100vh;"
+          *ngIf="allSearch()?.controls?.length > 0">
           <form class="" [formGroup]="searchFilterForm">
             <div formArrayName="search">
               <ion-grid cdkDropList (cdkDropListDropped)="drop($event)" class="example-list">
@@ -57,7 +59,7 @@
                     </select>
                   </ion-col>
                   <ion-col size-xs="12" size-sm="">
-                    <select class="select-class" formControlName="param2" onselect=""
+                    <select class="select-class" formControlName="param2" onselect="" (change)="onParam2Change(i)"
                       [ngClass]="!allSearch().controls[i].get('param2')?.valid && submitted ? 'error' : ''">
                       <option class="select-options" [value]="p2.name" *ngFor="let p2  of param2List[i];">
                         {{p2.name}}
@@ -66,53 +68,32 @@
                   </ion-col>
                   <ion-col size-xs="12" size-sm="" class="input-wrapper">
 
-                    <ion-input clearInput type="date" class="input-box" formControlName="param3"
-                      [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
-                      *ngIf="isDate">
-                    </ion-input>
+
 
                     <ion-input clearInput type="text" class="input-box" formControlName="param3"
                       [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
-                      *ngIf="!isDate">
+                      *ngIf="!isDateType(i) else dates">
                     </ion-input>
 
-                    <!-- <mat-form-field class="mat-form">
-                      <mat-label>Enter a date range</mat-label>
-                      <mat-date-range-input [rangePicker]="picker" class="date-input">
-                        <input matStartDate matInput placeholder="Start date">
-                        <input matEndDate matInput placeholder="End date">
-                      </mat-date-range-input>
-                      <mat-datepicker-toggle matSuffix [for]="picker" class="toggle"></mat-datepicker-toggle>
-                      <mat-date-range-picker #picker class="range-picker"></mat-date-range-picker>
-                    </mat-form-field> -->
+                    <ng-template #dates>
 
+                      <ion-input clearInput class="input-box range" formControlName="param3"
+                        [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
+                        *ngIf="allSearch().controls[i].get('param2')?.value === 'BETWEEN'" id="{{'datepicker' + i}}">
+                      </ion-input>
 
+                      <ion-input clearInput type="date" class="input-box" formControlName="param3"
+                        [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
+                        *ngIf="allSearch().controls[i].get('param2')?.value !== 'BETWEEN'">
+                      </ion-input>
+                    </ng-template>
 
-                    <!-- <ion-input clearInput type="date" class="input-box" formControlName="param3"
-                    [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''" *ngIf="!(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">
-                  </ion-input>
-                  
-                  <ion-input clearInput type="text" class="input-box" formControlName="param3"
-                    [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''" *ngIf="!(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">
-                  </ion-input> -->
-
-                    <!-- <ion-datetime locale="in-IN" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''" *ngIf="(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')"></ion-datetime> -->
                   </ion-col>
-
-                  <!-- <ion-col size-xs="12" size-sm="" class="input">
-                      <ion-input clearInput type="text" class="input-box" formControlName="param3"
-                      [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''"  *ngIf=" searchData" >
-                    </ion-input> -->
-                  <!-- <ion-input clearInput type="date" class="input-box" formControlName="param3"
-                      [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''">
-                    </ion-input> -->
-
-                  <!-- <ion-datetime locale="in-IN" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''"></ion-datetime> -->
-                  <!-- </ion-col> -->
-                  <ion-col size-xs="12" size-sm="" class="input">
+                  <ion-col size-xs="12" size-sm="" class="input"
+                    *ngIf="allSearch().controls[i].get('param1')?.value ==='MODIFICATION_DATE'">
                     <ion-input clearInput type="text" class="input-box" formControlName="param4"
                       [ngClass]="!allSearch().controls[i].get('param4')?.valid && submitted ? 'error' : ''"
-                      *ngIf="(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">
+                      *ngIf="isDestinationNeeded(i)">
                     </ion-input>
                   </ion-col>
                 </ion-row>

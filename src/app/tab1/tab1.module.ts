@@ -6,8 +6,7 @@ import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
-import { Tab1PageRoutingModule } from './tab1-routing.module';
-import { AppMaterialModule } from '../app.material.module';
+import { Tab1PageRoutingModule } from './tab1-routing.module';;
 
 @NgModule({
   imports: [
@@ -15,7 +14,6 @@ import { AppMaterialModule } from '../app.material.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    AppMaterialModule,
     ExploreContainerComponentModule,
     Tab1PageRoutingModule,
     DragDropModule,

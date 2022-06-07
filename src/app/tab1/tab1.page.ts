@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FilterModel } from '../interfaces/filterModel';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-
+declare var easepick: any
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page implements OnInit {
-  
+
   searchData = [
     {
       id: 1,
       name: "CLIP_NOTES",
+      type: 'text',
       subMenu: [
         {
           id: 1,
@@ -45,6 +46,7 @@ export class Tab1Page implements OnInit {
     {
       id: 2,
       name: "FRAME_NOTES",
+      type: 'text',
       subMenu: [
         {
           id: 1,
@@ -75,6 +77,7 @@ export class Tab1Page implements OnInit {
     {
       id: 3,
       name: "TRANSCRIPTS",
+      type: 'text',
       subMenu: [
         {
           id: 1,
@@ -105,6 +108,7 @@ export class Tab1Page implements OnInit {
     {
       id: 4,
       name: "FILE_NAME",
+      type: 'text',
       subMenu: [
         {
           id: 1,
@@ -131,6 +135,7 @@ export class Tab1Page implements OnInit {
     {
       id: 5,
       name: "DURATION",
+      type: 'text',
       subMenu: [
         {
           id: 1,
@@ -149,6 +154,7 @@ export class Tab1Page implements OnInit {
     {
       id: 5,
       name: "CARD_SERIAL",
+      type: 'text',
       subMenu: [
         {
           id: 1,
@@ -167,6 +173,7 @@ export class Tab1Page implements OnInit {
     {
       id: 5,
       name: "RECORDER_SERIAL",
+      type: 'text',
       subMenu: [
         {
           id: 1,
@@ -185,6 +192,7 @@ export class Tab1Page implements OnInit {
     {
       id: 6,
       name: "SHOOTING_DATE",
+      type: 'date',
       subMenu: [
         {
           id: 1,
@@ -207,6 +215,7 @@ export class Tab1Page implements OnInit {
     {
       id: 6,
       name: "CREATION_DATE",
+      type: 'date',
       subMenu: [
         {
           id: 1,
@@ -229,6 +238,7 @@ export class Tab1Page implements OnInit {
     {
       id: 7,
       name: "MODIFICATION_DATE",
+      type: 'date',
       subMenu: [
         {
           id: 1,
@@ -261,26 +271,56 @@ export class Tab1Page implements OnInit {
   presetSelected: string = '';
   searchParamId: any;
   id: any;
-  isDate : boolean = false;
-  modBetween : boolean = false;
+  isDate: boolean = false;
+  modBetween: boolean = false;
   mod: boolean = false;
-  dates = ['SHOOTING_DATE','CREATION_DATE','MODIFICATION_DATE'];
+  dates = ['SHOOTING_DATE', 'CREATION_DATE', 'MODIFICATION_DATE'];
   constructor(private fb: FormBuilder) { }
- 
+
   ngOnInit() {
     this.initPriceForm()
     this.updatePreselectList()
     this.onPreselectDDLChange(1);
   }
+
+  createDatePicker(i, date?: any) {
+    const presetDate = date && date.param3 ? date.param3.split(" - ") : []    
+    const picker = new easepick.create({
+      element: "#datepicker" + i,
+      css: [
+        "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.0/dist/index.css",
+      ],
+      zIndex: 99,
+      plugins: [
+        "AmpPlugin",
+        "RangePlugin"
+      ],
+    })
+
+    picker.on('select', (date) => {
+      this.allSearch().controls[i].get('param3').setValue(date.detail.start.toLocaleString().split(",")[0] + " - " + date.detail.end.toLocaleString().split(",")[0])
+    });
+
+    picker.on('show', () => {
+      let startDate = presetDate[0] ? new Date(presetDate[0]) : new Date()
+      let endDate = presetDate[1] ? new Date(presetDate[1]) : new Date()
+      if (startDate) {
+        startDate.setMonth(startDate.getMonth());
+        picker.setDateRange(startDate, endDate);
+      }
+    });
+  }
+
   get f() { return this.searchFilterForm.controls; }
+
   addRow(flag?: boolean) {
     this.submitted = false
     if (flag) {
       if (this.allSearch().controls.length > 0) return;
-      this.addSearch({ param1: '', param2: '', param3: '', param4:'' })
+      this.addSearch({ param1: '', param2: '', param3: '', param4: '' })
       return
     }
-    this.addSearch({ param1: '', param2: '', param3: '', param4:'' })
+    this.addSearch({ param1: '', param2: '', param3: '', param4: '' })
   }
 
   removeRow(index: any) {
@@ -296,7 +336,7 @@ export class Tab1Page implements OnInit {
   }
 
 
-  
+
   deletePreset() {
     let messageSpan = document.getElementById("message");
     const localData: any = localStorage.getItem("presetSearch");
@@ -401,7 +441,6 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    debugger
     let messageSpan = document.getElementById("message");
     var localJSON = [];
     const localData = localStorage.getItem("presetSearch");
@@ -469,22 +508,8 @@ export class Tab1Page implements OnInit {
   }
 
   onParam1Change(i: any) {
-    debugger
     const row = this.allSearch().controls[i] as FormGroup
     const menu = this.searchData.find(f => f.name.toLowerCase() === row.get('param1').value.toLowerCase())
-
-    if(this.dates.includes(menu.name)) {
-      this.isDate = true;
-    }else {
-      this.isDate = false;
-    }
-
-    if(menu.name == 'MODIFICATION_DATE') {
-      this.mod = true;
-    }
-    else {
-      this.mod = false;
-    }
 
     row.get('param2').enable()
     row.get('param3').enable()
@@ -499,12 +524,35 @@ export class Tab1Page implements OnInit {
     row.get('param2').setValue(this.param2List[i][0].name)
   }
 
+
+  onParam2Change(i: any, data?: any) {
+    const row = this.allSearch().controls[i] as FormGroup
+    if (row.value.param2.toUpperCase() === "BETWEEN") {
+      setTimeout(() => { this.createDatePicker(i, data) }, 100)
+
+    }
+  }
+
+
   getClass(form: any, key: any) {
     return this
   }
 
+  isDateType(formControl) {
+    const param1Obj = this.searchData.find(f => f.name.toLocaleLowerCase()
+      === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
+    if (!param1Obj) return false
+    return param1Obj.type === 'date' ? true : false
+  }
+
+  isDestinationNeeded(formControl) {
+    const param1Obj = this.searchData.find(f => f.name.toLocaleLowerCase()
+      === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
+    if (!param1Obj) return false
+    return param1Obj.name.toUpperCase() === 'MODIFICATION_DATE' ? true : false
+  }
+
   savePreselectForm() {
-    debugger
     this.submitted = true;
     if (!this.allSearch().valid) {
       return;
@@ -615,18 +663,6 @@ export class Tab1Page implements OnInit {
     this.id = e?.target?.options[e?.target?.selectedIndex]?.value;
     this.searchParamId = e.target?.value;
 
-    // if (e && e?.target && e?.target?.options) {
-    //   this.searchParam = e.target.options[e.target.selectedIndex].text;
-    //   this.id = e?.target?.options[e?.target?.selectedIndex]?.value;
-    //   this.searchParamId = e.target.value;
-    // } else {
-    //   let data = this.getDefaultData();
-    //   this.id = data?.id;
-    //   this.searchParam = data?.filterName;
-    //   this.presetSelected = data?.id + "";
-    //   this.searchParamId = data?.id;
-    // }
-
     if (this.searchParam && this.searchParam == 'Select') {
       this.allSearch().clear();
     }
@@ -654,8 +690,11 @@ export class Tab1Page implements OnInit {
             param4: f.param4
           });
         })
-        tempArray.map(m => {
+        tempArray.map((m, i) => {
           this.addSearch(m)
+          // if (m.param2 === 'BETWEEN') {
+          this.onParam2Change(i, m)
+          // }
         })
       }
       else {
@@ -691,23 +730,4 @@ export class Tab1Page implements OnInit {
     this.onParam1Change(event.currentIndex)
     this.onParam1Change(event.previousIndex)
   }
-
-  // getDefaultData() {
-  //   let data = JSON.parse(localStorage.getItem("presetSearch"));
-  //   return data[0];
-  // }
 }
-
-
-
-// let picker = new Lightpick({
-//   field: document.getElementById('result-7'),
-//   singleDate: false,
-//   selectForward: true,
-//   onSelect: function(start:any, end:any){
-//       var str = '';
-//       str += start ? start.format('Do MMMM YYYY') + ' to ' : '';
-//       str += end ? end.format('Do MMMM YYYY') : '...';
-//       document.getElementById('result-7').innerHTML = str;
-//   }
-// });

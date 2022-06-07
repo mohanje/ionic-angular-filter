@@ -58,14 +58,17 @@ ion-input {
   padding: 3vh;
 
 }
+
 .input-wrapper {
   display: flex;
   align-items: center;
 }
+
 .input-box {
   height: 5vh;
   margin-bottom: 0.3rem;
 }
+
 .accordion {
   border: 2px solid #fff;
   border-radius: 5px;
@@ -104,30 +107,36 @@ ion-accordion-group {
 .save-btn {
   text-align: center;
 }
+
 .btn-group {
   display: flex !important;
   justify-content: space-between !important;
   width: 100% !important;
   margin: 0.5rem 0px;
 }
+
 .clear-filter {
   display: flex !important;
   justify-content: flex-start !important;
 }
+
 .apply-filter {
   display: flex !important;
   justify-content: flex-end !important;
 }
+
 .clear-btn::part(native) {
   background: rgb(47, 214, 225);
   padding: 1rem !important;
 }
+
 .apply-btn::part(native) {
   background: rgb(203, 35, 203);
   padding: 1rem !important;
 }
-.save::part(native){
-  background:green;
+
+.save::part(native) {
+  background: green;
 }
 
 .item-interactive::part(native) {
@@ -233,7 +242,8 @@ ion-item:not(.item-label) .sc-ion-input-md-h {
 .warning {
   color: orange;
 }
-.delete-preset::part(native)  {
+
+.delete-preset::part(native) {
   background-color: red;
   color: white;
   // padding: 1rem;
@@ -255,7 +265,7 @@ ion-item:not(.item-label) .sc-ion-input-md-h {
 //   background: rgb(184, 16, 16);
 //   padding:2rem !important;
 //   margin:-2rem !important;
-  
+
 // }
 // ::ng-deep .mat-calendar-body-cell {
 //   padding: 0px !important;
@@ -298,24 +308,69 @@ ion-item:not(.item-label) .sc-ion-input-md-h {
 //   height: 100px !important;
 // }
 
-.mat-form ::ng-deep .mat-calendar-body-cell-container{
-// width: 100px !important;
+
+
+label {
+  display: block;
+  font: 1rem 'Fira Sans', sans-serif;
+}
+
+input,
+label {
+  margin: .4rem 0;
+}
+
+#start {
+  padding: 7px 10px !important;
+  background: transparent;
+  border: 1px solid #d0c9c9;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  margin-top: 0px !important;
+  color: white !important;
+  // background: black;
+  height: 5vh;
+}
+
+#end {
+  padding: 7px 10px !important;
+  background: transparent;
+  border: 1px solid #d0c9c9;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+  margin-top: 0px !important;
+  color: white !important;
+  background: transparent !important;
+  height: 5vh;
+}
+
+.mat-form ::ng-deep .mat-calendar-body-cell-container {
+  // width: 100px !important;
   background-color: pink !important;
   width: 100px !important;
   height: 100px !important;
 }
-.range-picker ::ng-deep .mat-calendar-body-cell-container{
+
+.range-picker ::ng-deep .mat-calendar-body-cell-container {
   // width: 100px !important;
-    background-color: rgb(192, 255, 219) !important;
-    width: 100px !important;
-    height: 100px !important;
-  }
+  background-color: rgb(192, 255, 219) !important;
+  width: 100px !important;
+  height: 100px !important;
+}
+
 .date-input {
   background: #000;
 }
-.toggle ::ng-deep .mat-calendar-body-cell-container{
+
+.toggle ::ng-deep .mat-calendar-body-cell-container {
   // width: 100px !important;
-    background-color: rgb(214, 18, 51) !important;
-    width: 100px !important;
-    height: 100px !important;
+  background-color: rgb(214, 18, 51) !important;
+  width: 100px !important;
+  height: 100px !important;
+}
+
+::ng-deep.easepick-wrapper {
+  .container {
+    background-color: red
   }
+}

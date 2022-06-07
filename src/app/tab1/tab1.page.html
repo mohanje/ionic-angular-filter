@@ -71,13 +71,10 @@
                       *ngIf="isDate">
                     </ion-input>
 
-                    <ion-input clearInput type="text" class="input-box" formControlName="param3"
-                      [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
+                    <ion-input clearInput type="text" class="input-box" formControlName="param4"
+                      [ngClass]="!allSearch().controls[i].get('param4')?.valid && submitted ? 'error' : ''"
                       *ngIf="!isDate">
                     </ion-input>
-
-
-
 
                     <!-- <mat-form-field class="mat-form">
                       <mat-label>Enter a date range</mat-label>
@@ -113,8 +110,8 @@
                   <!-- <ion-datetime locale="in-IN" formControlName="param3" [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''"></ion-datetime> -->
                   <!-- </ion-col> -->
                   <ion-col size-xs="12" size-sm="" class="input">
-                    <ion-input clearInput type="text" class="input-box" formControlName="param3"
-                      [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
+                    <ion-input clearInput type="text" class="input-box" formControlName="param4"
+                      [ngClass]="!allSearch().controls[i].get('param4')?.valid && submitted ? 'error' : ''"
                       *ngIf="(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">
                     </ion-input>
                   </ion-col>

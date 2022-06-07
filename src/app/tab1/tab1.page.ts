@@ -10,6 +10,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
+  
   searchData = [
     {
       id: 1,
@@ -276,10 +277,10 @@ export class Tab1Page implements OnInit {
     this.submitted = false
     if (flag) {
       if (this.allSearch().controls.length > 0) return;
-      this.addSearch({ param1: '', param2: '', param3: '' })
+      this.addSearch({ param1: '', param2: '', param3: '', param4:'' })
       return
     }
-    this.addSearch({ param1: '', param2: '', param3: '' })
+    this.addSearch({ param1: '', param2: '', param3: '', param4:'' })
   }
 
   removeRow(index: any) {
@@ -443,6 +444,8 @@ export class Tab1Page implements OnInit {
       param1: [item?.param1, [Validators.required,]],
       param2: [{ value: item?.param2, disabled: item?.param2 ? false : true }, [Validators.required]],
       param3: [{ value: item?.param3, disabled: item?.param3 ? false : true }, [Validators.required]],
+      param4: [{ value: item?.param4, disabled: item?.param4 ? false : true }, [Validators.required]],
+
 
     });
   }
@@ -483,6 +486,7 @@ export class Tab1Page implements OnInit {
 
     row.get('param2').enable()
     row.get('param3').enable()
+    row.get('param4').enable()
     if (this.param2List && this.param2List.length > 0) {
       this.param2List[i] = menu.subMenu
     } else {
@@ -504,7 +508,7 @@ export class Tab1Page implements OnInit {
     }
 
     let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[];
-    let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
+    let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '' && m.param4 !== '');
     let messageSpan = document.getElementById("message");
     let isModified = true;
     if (every) {
@@ -534,7 +538,7 @@ export class Tab1Page implements OnInit {
       if (this.preSelectList.some(s => s.filterName == this.searchParam)) {
         if (isModified) {
 
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3 && data?.param4);
           const finalData = [{ id: 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search }];
           let data = localJSON.filter(ele => ele.id != this.id);
           data = [...data, ...finalData];
@@ -547,7 +551,7 @@ export class Tab1Page implements OnInit {
       else {
         if (!this.preSelectList || this.preSelectList.length === 0) {
           const allFilters = []
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3 && data?.param4);
           const finalData = { id: 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
           allFilters.push(finalData)
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
@@ -562,7 +566,7 @@ export class Tab1Page implements OnInit {
           }
         } else {
           const allFilters = this.preSelectList
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3 && data?.param4);
           const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
           allFilters.push(finalData)
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
@@ -644,6 +648,7 @@ export class Tab1Page implements OnInit {
             param1: f.param1,
             param2: f.param2,
             param3: f.param3,
+            param4: f.param4
           });
         })
         tempArray.map(m => {

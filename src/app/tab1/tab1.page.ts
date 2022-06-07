@@ -295,6 +295,8 @@ export class Tab1Page implements OnInit {
     }
   }
 
+
+  
   deletePreset() {
     let messageSpan = document.getElementById("message");
     const localData: any = localStorage.getItem("presetSearch");
@@ -444,7 +446,7 @@ export class Tab1Page implements OnInit {
       param1: [item?.param1, [Validators.required,]],
       param2: [{ value: item?.param2, disabled: item?.param2 ? false : true }, [Validators.required]],
       param3: [{ value: item?.param3, disabled: item?.param3 ? false : true }, [Validators.required]],
-      param4: [{ value: item?.param4, disabled: item?.param4 ? false : true }, [Validators.required]],
+      param4: [{ value: item?.param4, disabled: item?.param4 ? false : true }],
 
 
     });
@@ -502,13 +504,14 @@ export class Tab1Page implements OnInit {
   }
 
   savePreselectForm() {
+    debugger
     this.submitted = true;
     if (!this.allSearch().valid) {
       return;
     }
 
     let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[];
-    let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '' && m.param4 !== '');
+    let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
     let messageSpan = document.getElementById("message");
     let isModified = true;
     if (every) {

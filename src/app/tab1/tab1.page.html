@@ -71,8 +71,8 @@
                       *ngIf="isDate">
                     </ion-input>
 
-                    <ion-input clearInput type="text" class="input-box" formControlName="param4"
-                      [ngClass]="!allSearch().controls[i].get('param4')?.valid && submitted ? 'error' : ''"
+                    <ion-input clearInput type="text" class="input-box" formControlName="param3"
+                      [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
                       *ngIf="!isDate">
                     </ion-input>
 
@@ -86,7 +86,7 @@
                       <mat-date-range-picker #picker class="range-picker"></mat-date-range-picker>
                     </mat-form-field> -->
 
-                    
+
 
                     <!-- <ion-input clearInput type="date" class="input-box" formControlName="param3"
                     [ngClass]="!allSearch().controls[i].get('param3').valid && submitted ? 'error' : ''" *ngIf="!(mod && allSearch().controls[i].get('param2').value == 'BETWEEN')">

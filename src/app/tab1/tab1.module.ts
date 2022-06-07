@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { Tab1PageRoutingModule } from './tab1-routing.module';
+import { AppMaterialModule } from '../app.material.module';
 
 @NgModule({
   imports: [
@@ -14,9 +15,10 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    AppMaterialModule,
     ExploreContainerComponentModule,
     Tab1PageRoutingModule,
-    DragDropModule
+    DragDropModule,
   ],
   declarations: [Tab1Page]
 })

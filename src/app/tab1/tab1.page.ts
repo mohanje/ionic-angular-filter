@@ -588,11 +588,11 @@ export class Tab1Page implements OnInit {
 
       if (this.preSelectList.some(s => s.filterName == this.searchParam)) {
         if (isModified) {
-          // filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          debugger
           const finalData = [{ id: Number(this.searchParamId), filterName: this.searchParam, filters: this.searchFilterForm.getRawValue()?.search }];
-          // let data = localJSON.filter(ele => ele.id == this.id);
-          // data = [...data, ...finalData];
-          localStorage.setItem("presetSearch", JSON.stringify(finalData));
+          let data = localJSON.filter(ele => ele.id != +this.searchParamId);
+          data = [...data, ...finalData];
+          localStorage.setItem("presetSearch", JSON.stringify(data));
           this.updatePreselectList();
           messageSpan.style.color = 'green'
           this.message = "Your filter updated successfully.";
@@ -646,6 +646,13 @@ export class Tab1Page implements OnInit {
       localJSON = JSON.parse(localData);
       this.preSelectList = localJSON
     }
+
+    setTimeout(() => {
+      if (this.searchParam)
+        this.presetSelected = localJSON.find(f => f.filterName.toLowerCase() === this.searchParam.toLowerCase()).id
+        this.searchParamId = this.presetSelected
+    }, 1000);
+
   }
 
   onPreselectDDLChange(e: any) {
@@ -714,7 +721,7 @@ export class Tab1Page implements OnInit {
     }
 
     if (data?.filters?.length === this.allSearch().controls.length) {
-      if (JSON.stringify(data?.filters) !== JSON.stringify(this.allSearch().value)) {
+      if (JSON.stringify(data?.filters) !== JSON.stringify(this.allSearch().getRawValue())) {
         return false
       }
     }

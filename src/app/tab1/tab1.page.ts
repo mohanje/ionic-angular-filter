@@ -284,7 +284,7 @@ export class Tab1Page implements OnInit {
   }
 
   createDatePicker(i, date?: any) {
-    const presetDate = date && date.param3 ? date.param3.split(" - ") : []    
+    const presetDate = date && date.param3 ? date.param3.split(" - ") : []
     const picker = new easepick.create({
       element: "#datepicker" + i,
       css: [
@@ -380,7 +380,7 @@ export class Tab1Page implements OnInit {
     const localData: any = localStorage.getItem("presetSearch");
     const localJSON = JSON.parse(localData);
 
-    if (localJSON[this.searchParam]) {
+    if (localJSON && localJSON[this.searchParam]) {
       const temp1 = localJSON[this.searchParam]
       temp1.splice(index, 1)
       if (temp1.length > 0) {
@@ -515,9 +515,9 @@ export class Tab1Page implements OnInit {
     row.get('param3').enable()
     row.get('param4').enable()
     if (this.param2List && this.param2List.length > 0) {
-      this.param2List[i] = menu.subMenu
+      this.param2List[i] = menu?.subMenu
     } else {
-      this.param2List.push(menu.subMenu)
+      this.param2List.push(menu?.subMenu)
     }
     row.get('param2').markAllAsTouched()
     row.get('param2').markAsDirty()
@@ -588,12 +588,11 @@ export class Tab1Page implements OnInit {
 
       if (this.preSelectList.some(s => s.filterName == this.searchParam)) {
         if (isModified) {
-
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3 && data?.param4);
-          const finalData = [{ id: 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search }];
-          let data = localJSON.filter(ele => ele.id != this.id);
-          data = [...data, ...finalData];
-          localStorage.setItem("presetSearch", JSON.stringify([...data]));
+          // filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          const finalData = [{ id: Number(this.searchParamId), filterName: this.searchParam, filters: this.searchFilterForm.getRawValue()?.search }];
+          // let data = localJSON.filter(ele => ele.id == this.id);
+          // data = [...data, ...finalData];
+          localStorage.setItem("presetSearch", JSON.stringify(finalData));
           this.updatePreselectList();
           messageSpan.style.color = 'green'
           this.message = "Your filter updated successfully.";
@@ -602,7 +601,7 @@ export class Tab1Page implements OnInit {
       else {
         if (!this.preSelectList || this.preSelectList.length === 0) {
           const allFilters = []
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3 && data?.param4);
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
           const finalData = { id: 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
           allFilters.push(finalData)
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
@@ -616,8 +615,9 @@ export class Tab1Page implements OnInit {
             }, 3000)
           }
         } else {
+
           const allFilters = this.preSelectList
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3 && data?.param4);
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
           const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
           allFilters.push(finalData)
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
@@ -687,7 +687,7 @@ export class Tab1Page implements OnInit {
             param1: f.param1,
             param2: f.param2,
             param3: f.param3,
-            param4: f.param4
+            param4: f.param4 ? f.param4 : ''
           });
         })
         tempArray.map((m, i) => {

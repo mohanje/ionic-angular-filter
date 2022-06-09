@@ -14,247 +14,247 @@ export class Tab1Page implements OnInit {
   searchData = [
     {
       id: 1,
-      name: "CLIP_NOTES",
+      name: "Clip Notes",
       type: 'text',
       subMenu: [
         {
           id: 1,
-          name: "CONTAINS",
+          name: "Contains",
         },
         {
           id: 2,
-          name: "CONTAINS_WORDS",
+          name: "Contains Words",
         },
         {
           id: 3,
-          name: "IS",
+          name: "Is",
         },
         {
           id: 4,
-          name: "BEGINS_WITH",
+          name: "Begin With",
         },
         {
           id: 5,
-          name: "ENDS_WITH",
+          name: "Ends With",
         },
         {
           id: 6,
-          name: "IS_NOT",
+          name: "Is Not",
         },
       ],
     },
     {
       id: 2,
-      name: "FRAME_NOTES",
+      name: "Frame Notes",
       type: 'text',
       subMenu: [
         {
           id: 1,
-          name: "CONTAINS",
+          name: "Contains",
         },
         {
           id: 2,
-          name: "CONTAINS_WORDS",
+          name: "Contains Words",
         },
         {
           id: 3,
-          name: "IS",
+          name: "Is",
         },
         {
           id: 4,
-          name: "BEGINS_WITH",
+          name: "Begin With",
         },
         {
           id: 5,
-          name: "ENDS_WITH",
+          name: "Ends With",
         },
         {
           id: 6,
-          name: "IS_NOT",
+          name: "Is Not",
         },
       ],
     },
     {
       id: 3,
-      name: "TRANSCRIPTS",
+      name: "Transcripts",
       type: 'text',
       subMenu: [
         {
           id: 1,
-          name: "CONTAINS",
+          name: "Contains",
         },
         {
           id: 2,
-          name: "CONTAINS_WORDS",
+          name: "Contains Words",
         },
         {
           id: 3,
-          name: "IS",
+          name: "Is",
         },
         {
           id: 4,
-          name: "BEGINS_WITH",
+          name: "Begin With",
         },
         {
           id: 5,
-          name: "ENDS_WITH",
+          name: "Ends With",
         },
         {
           id: 6,
-          name: "IS_NOT",
+          name: "Is Not",
         },
       ],
     },
     {
       id: 4,
-      name: "FILE_NAME",
+      name: "File Name",
       type: 'text',
       subMenu: [
         {
           id: 1,
-          name: "CONTAINS",
+          name: "Contains",
         },
         {
           id: 2,
-          name: "IS",
+          name: "Is",
         },
         {
           id: 3,
-          name: "BEGINS_WITH",
+          name: "Begin With",
         },
         {
           id: 4,
-          name: "ENDS_WITH",
+          name: "Ends With",
         },
         {
           id: 5,
-          name: "IS_NOT",
+          name: "Is Not",
         },
       ],
     },
     {
       id: 5,
-      name: "DURATION",
-      type: 'text',
+      name: "Duration",
+      type: 'time',
       subMenu: [
         {
           id: 1,
-          name: "LONGER_THAN",
+          name: "Longer Than",
         },
         {
           id: 2,
-          name: "SHORTER_THAN",
+          name: "Shorter Than",
         },
         {
           id: 3,
-          name: "SHOW_TOTAL_DURATION_FOR_SELECTION",
+          name: "Show Total Duration For Selection",
         },
       ],
     },
     {
       id: 5,
-      name: "CARD_SERIAL",
+      name: "Card Serial",
       type: 'text',
       subMenu: [
         {
           id: 1,
-          name: "CONTAINS",
+          name: "Contains",
         },
         {
           id: 2,
-          name: "IS",
+          name: "Is",
         },
         {
           id: 3,
-          name: "IS_NOT",
+          name: "Is Not",
         },
       ],
     },
     {
       id: 5,
-      name: "RECORDER_SERIAL",
+      name: "Recorder Serial",
       type: 'text',
       subMenu: [
         {
           id: 1,
-          name: "CONTAINS",
+          name: "Contains",
         },
         {
           id: 2,
-          name: "IS",
+          name: "Is",
         },
         {
           id: 3,
-          name: "IS_NOT",
+          name: "Is Not",
         },
       ],
     },
     {
       id: 6,
-      name: "SHOOTING_DATE",
+      name: "Shooting Date",
       type: 'date',
       subMenu: [
         {
           id: 1,
-          name: "EXACTLY",
+          name: "Exactly",
         },
         {
           id: 2,
-          name: "BEFORE",
+          name: "Before",
         },
         {
           id: 3,
-          name: "AFTER",
+          name: "After",
         },
         {
           id: 4,
-          name: "BETWEEN",
+          name: "Between",
         },
       ],
     },
     {
       id: 6,
-      name: "CREATION_DATE",
+      name: "Creation Date",
       type: 'date',
       subMenu: [
         {
           id: 1,
-          name: "EXACTLY",
+          name: "Exactly",
         },
         {
           id: 2,
-          name: "BEFORE",
+          name: "Before",
         },
         {
           id: 3,
-          name: "AFTER",
+          name: "After",
         },
         {
           id: 4,
-          name: "BETWEEN",
+          name: "Between",
         },
       ],
     },
     {
       id: 7,
-      name: "MODIFICATION_DATE",
+      name: "Modification Date",
       type: 'date',
       subMenu: [
         {
           id: 1,
-          name: "EXACTLY",
+          name: "Exactly",
         },
         {
           id: 2,
-          name: "BEFORE",
+          name: "Before",
         },
         {
           id: 3,
-          name: "AFTER",
+          name: "After",
         },
         {
           id: 4,
-          name: "BETWEEN",
+          name: "Between",
         },
       ],
     },
@@ -266,7 +266,7 @@ export class Tab1Page implements OnInit {
   preSelectList = [];
   message: string = '';
   updated: boolean = false;
-  submitted: boolean;
+  submitted: boolean = false;
   submittedForm: boolean;
   presetSelected: string = '';
   searchParamId: any;
@@ -274,7 +274,7 @@ export class Tab1Page implements OnInit {
   isDate: boolean = false;
   modBetween: boolean = false;
   mod: boolean = false;
-  dates = ['SHOOTING_DATE', 'CREATION_DATE', 'MODIFICATION_DATE'];
+  dates = ['Shooting Date', 'Creation Date', 'Modification Date'];
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -341,13 +341,14 @@ export class Tab1Page implements OnInit {
     let messageSpan = document.getElementById("message");
     const localData: any = localStorage.getItem("presetSearch");
     const localJSON = JSON.parse(localData);
-    let checkIfExist = localJSON.filter(ele => ele?.id == this.id);
-    if (localJSON.length > 0) {
+    
+    if ( localJSON && localJSON.length > 0) {
+      let checkIfExist = localJSON.filter(ele => ele?.id == this.id);
       if (checkIfExist && checkIfExist?.length > 0) {
         const temp1 = localJSON[this.searchParam];
-        let data = localJSON.filter(ele => ele?.id != this.id);
+       
         if (confirm(`Are you sure to delete ${this.searchParam} preset.`)) {
-
+          let data = localJSON.filter(ele => ele?.id != this?.id);
           localStorage.setItem("presetSearch", JSON.stringify(data));
           messageSpan.style.color = 'green'
           this.message = `'${this.searchParam}' is deleted successfully.`;
@@ -356,13 +357,17 @@ export class Tab1Page implements OnInit {
               this.message = '';
             }, 3000)
           }
-          this.updatePreselectList();
+          this.presetSelected = '';
+          this.searchParam = '';
+          
           this.allSearch().clear();
+          this.updatePreselectList();
         }
       }
       else {
         messageSpan.style.color = 'red';
-        this.message = !this.searchParam ? 'Please select preset to delete.' : `${this.searchParam} is not present in preset list.`;
+        this.message = 'Please select preset to delete.';
+        // : `${this.searchParam} is not present in preset list.`;
         if (this.message) {
           setTimeout(() => {
             this.message = '';
@@ -396,7 +401,15 @@ export class Tab1Page implements OnInit {
     }
   }
 
+  // re(){
+  //   const re1="";
+  //   const re2=this.searchFilterForm.value.search;
+  //   if (JSON.stringify(re1) === JSON.stringify(re2)) {
+  //     return true
+  //   }
+
   clearFilter() {
+    debugger
     this.submitted = false;
     if (!this.searchParam) {
       let isData = false
@@ -487,13 +500,13 @@ export class Tab1Page implements OnInit {
       param3: [{ value: item?.param3, disabled: item?.param3 ? false : true }, [Validators.required]],
       param4: [{ value: item?.param4, disabled: item?.param4 ? false : true }],
 
-
     });
   }
 
   allSearch(): FormArray {
     return this.searchFilterForm.get('search') as FormArray;
   }
+
 
   getArray() {
     return this.searchFilterForm.get('search') as any;
@@ -527,7 +540,7 @@ export class Tab1Page implements OnInit {
 
   onParam2Change(i: any, data?: any) {
     const row = this.allSearch().controls[i] as FormGroup
-    if (row.value.param2.toUpperCase() === "BETWEEN") {
+    if (row.value.param2.toLowerCase() === "Between".toLowerCase()) {
       setTimeout(() => { this.createDatePicker(i, data) }, 100)
 
     }
@@ -545,11 +558,18 @@ export class Tab1Page implements OnInit {
     return param1Obj.type === 'date' ? true : false
   }
 
+  // isTimeType(formControl) {
+  //   const param1Obj = this.searchData.find(f => f.name.toLocaleLowerCase()
+  //     === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
+  //   if (!param1Obj) return false
+  //   return param1Obj.type === 'time' ? true : false
+  // }
+
   isDestinationNeeded(formControl) {
     const param1Obj = this.searchData.find(f => f.name.toLocaleLowerCase()
       === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
     if (!param1Obj) return false
-    return param1Obj.name.toUpperCase() === 'MODIFICATION_DATE' ? true : false
+    return param1Obj.name.toLowerCase() === 'Modification Date'.toLowerCase() ? true : false
   }
 
   savePreselectForm() {
@@ -588,7 +608,7 @@ export class Tab1Page implements OnInit {
 
       if (this.preSelectList.some(s => s.filterName == this.searchParam)) {
         if (isModified) {
-          debugger
+
           const finalData = [{ id: Number(this.searchParamId), filterName: this.searchParam, filters: this.searchFilterForm.getRawValue()?.search }];
           let data = localJSON.filter(ele => ele.id != +this.searchParamId);
           data = [...data, ...finalData];
@@ -596,6 +616,11 @@ export class Tab1Page implements OnInit {
           this.updatePreselectList();
           messageSpan.style.color = 'green'
           this.message = "Your filter updated successfully.";
+          if (this.message) {
+            setTimeout(() => {
+              this.message = '';
+            }, 3000)
+          }
         }
       }
       else {
@@ -607,7 +632,7 @@ export class Tab1Page implements OnInit {
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
           this.updatePreselectList()
           messageSpan.style.color = 'green';
-          this.message = this.updated ? 'Filter updated successfully.' : 'Your Filter stored successfully.';
+          this.message = 'Your Filter stored successfully.';
           // this.searchParam = '';
           if (this.message) {
             setTimeout(() => {
@@ -623,7 +648,7 @@ export class Tab1Page implements OnInit {
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
           this.updatePreselectList()
           messageSpan.style.color = 'green';
-          this.message = this.updated ? 'Filter updated successfully.' : 'Your Filter stored successfully.';
+          this.message = 'Your Filter stored successfully.';
           // this.searchParam = '';
           if (this.message) {
             setTimeout(() => {
@@ -646,24 +671,26 @@ export class Tab1Page implements OnInit {
       localJSON = JSON.parse(localData);
       this.preSelectList = localJSON
     }
+    if(this.searchParam.toLowerCase()) {
+      this.presetSelected = localJSON.find(f => f.filterName.toLowerCase() === this.searchParam.toLowerCase()).id
+      this.searchParamId = this.presetSelected;
+    }
 
-    setTimeout(() => {
-      if (this.searchParam)
-        this.presetSelected = localJSON.find(f => f.filterName.toLowerCase() === this.searchParam.toLowerCase()).id
-        this.searchParamId = this.presetSelected
-    }, 1000);
+   
 
   }
 
   onPreselectDDLChange(e: any) {
+    debugger
     const changes = this.trackChanges(this.searchParamId);
-
     if (!changes) {
-      if (!confirm("Do you want to discard the current filter changes")) {
-        setTimeout(() => {
-          this.presetSelected = this.searchParamId
-        }, 100);
-        return
+      if (this.searchParam && this.searchParam !== 'Select') {
+        if (!confirm("Do you want to discard the current filter changes")) {
+          setTimeout(() => {
+            this.presetSelected = this.searchParamId
+          }, 100);
+          return
+        }
       }
     }
     this.searchParam = e.target?.options[e.target.selectedIndex]?.text;
@@ -699,7 +726,7 @@ export class Tab1Page implements OnInit {
         })
         tempArray.map((m, i) => {
           this.addSearch(m)
-          // if (m.param2 === 'BETWEEN') {
+          // if (m.param2 === 'Between') {
           this.onParam2Change(i, m)
           // }
         })
@@ -708,6 +735,7 @@ export class Tab1Page implements OnInit {
         this.allSearch().clear();
       }
     }
+
   }
 
   trackChanges = (param: any) => {
@@ -719,10 +747,12 @@ export class Tab1Page implements OnInit {
     if (!data) {
       return false
     }
-
     if (data?.filters?.length === this.allSearch().controls.length) {
       if (JSON.stringify(data?.filters) !== JSON.stringify(this.allSearch().getRawValue())) {
         return false
+      }
+      else {
+        return true;
       }
     }
     return true;

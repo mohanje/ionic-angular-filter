@@ -13,249 +13,249 @@ export class Tab1Page implements OnInit {
 
   searchData = [
     {
-      id: 1,
+      id: "CLIP_NOTES",
       name: "Clip Notes",
       type: 'text',
       subMenu: [
         {
-          id: 1,
+          id: "CONTAINS",
           name: "Contains",
         },
         {
-          id: 2,
+          id: "CONTAINS_WORDS",
           name: "Contains Words",
         },
         {
-          id: 3,
+          id: "IS",
           name: "Is",
         },
         {
-          id: 4,
+          id: "BEGIN_WITH",
           name: "Begin With",
         },
         {
-          id: 5,
+          id: "ENDS_WITH",
           name: "Ends With",
         },
         {
-          id: 6,
+          id: "IS_NOT",
           name: "Is Not",
         },
       ],
     },
     {
-      id: 2,
+      id: "FRAME_NOTES",
       name: "Frame Notes",
       type: 'text',
       subMenu: [
         {
-          id: 1,
+          id: "CONTAINS",
           name: "Contains",
         },
         {
-          id: 2,
+          id: "CONTAINS_WORDS",
           name: "Contains Words",
         },
         {
-          id: 3,
+          id: "IS",
           name: "Is",
         },
         {
-          id: 4,
+          id: "BEGIN_WITH",
           name: "Begin With",
         },
         {
-          id: 5,
+          id: "ENDS_WITH",
           name: "Ends With",
         },
         {
-          id: 6,
+          id: "IS_NOT",
           name: "Is Not",
-        },
+        }
       ],
     },
     {
-      id: 3,
+      id: "TRANSCRIPTS",
       name: "Transcripts",
       type: 'text',
       subMenu: [
         {
-          id: 1,
+          id: "CONTAINS",
           name: "Contains",
         },
         {
-          id: 2,
+          id: "CONTAINS_WORDS",
           name: "Contains Words",
         },
         {
-          id: 3,
+          id: "IS",
           name: "Is",
         },
         {
-          id: 4,
+          id: "BEGIN_WITH",
           name: "Begin With",
         },
         {
-          id: 5,
+          id: "ENDS_WITH",
           name: "Ends With",
         },
         {
-          id: 6,
+          id: "IS_NOT",
           name: "Is Not",
-        },
+        }
       ],
     },
     {
-      id: 4,
+      id: "FILE_NAME",
       name: "File Name",
       type: 'text',
       subMenu: [
         {
-          id: 1,
+          id: "CONTAINS",
           name: "Contains",
         },
         {
-          id: 2,
+          id: "IS",
           name: "Is",
         },
         {
-          id: 3,
+          id: "BEGIN_WITH",
           name: "Begin With",
         },
         {
-          id: 4,
+          id: "ENDS_WITH",
           name: "Ends With",
         },
         {
-          id: 5,
+          id: "IS_NOT",
           name: "Is Not",
-        },
+        }
       ],
     },
     {
-      id: 5,
+      id: "DURATION",
       name: "Duration",
       type: 'time',
       subMenu: [
         {
-          id: 1,
+          id: "LONGER_THAN",
           name: "Longer Than",
         },
         {
-          id: 2,
+          id: "SHORTER_THAN",
           name: "Shorter Than",
         },
         {
-          id: 3,
+          id: "SHOW_TOTAL_DURATION_FOR_SELECTION",
           name: "Show Total Duration For Selection",
         },
       ],
     },
     {
-      id: 5,
+      id: "CARD_SERIAL",
       name: "Card Serial",
       type: 'text',
       subMenu: [
         {
-          id: 1,
+          id: "CONTAINS",
           name: "Contains",
         },
         {
-          id: 2,
+          id: "IS",
           name: "Is",
         },
         {
-          id: 3,
+          id: "IS_NOT",
           name: "Is Not",
         },
       ],
     },
     {
-      id: 5,
+      id: "RECORDER_SERIAL",
       name: "Recorder Serial",
       type: 'text',
       subMenu: [
         {
-          id: 1,
+          id: "CONTAINS",
           name: "Contains",
         },
         {
-          id: 2,
+          id: "IS",
           name: "Is",
         },
         {
-          id: 3,
+          id: "IS_NOT",
           name: "Is Not",
         },
       ],
     },
     {
-      id: 6,
+      id: "SHOOTING_DATE",
       name: "Shooting Date",
       type: 'date',
       subMenu: [
         {
-          id: 1,
+          id: "EXACTLY",
           name: "Exactly",
         },
         {
-          id: 2,
+          id: "BEFORE",
           name: "Before",
         },
         {
-          id: 3,
+          id: "AFTER",
           name: "After",
         },
         {
-          id: 4,
+          id: "BETWEEN",
           name: "Between",
-        },
+        }
       ],
     },
     {
-      id: 6,
+      id: "CREATION_DATE",
       name: "Creation Date",
       type: 'date',
       subMenu: [
         {
-          id: 1,
+          id: "EXACTLY",
           name: "Exactly",
         },
         {
-          id: 2,
+          id: "BEFORE",
           name: "Before",
         },
         {
-          id: 3,
+          id: "AFTER",
           name: "After",
         },
         {
-          id: 4,
+          id: "BETWEEN",
           name: "Between",
-        },
+        }
       ],
     },
     {
-      id: 7,
+      id: "MODIFICATION_DATE",
       name: "Modification Date",
       type: 'date',
       subMenu: [
         {
-          id: 1,
+          id: "EXACTLY",
           name: "Exactly",
         },
         {
-          id: 2,
+          id: "BEFORE",
           name: "Before",
         },
         {
-          id: 3,
+          id: "AFTER",
           name: "After",
         },
         {
-          id: 4,
+          id: "BETWEEN",
           name: "Between",
-        },
+        }
       ],
     },
   ];
@@ -470,9 +470,15 @@ export class Tab1Page implements OnInit {
 
       }
       else {
-        if (confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
-          this.allSearch().clear();
-          this.searchParam = ''
+        if (JSON.stringify(temp1) !== JSON.stringify(temp2)) {
+          if(confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
+            this.allSearch().clear();
+            this.searchParam = ''
+          }
+          else {
+            return false
+          }
+          
         }
         else {
           return
@@ -521,6 +527,7 @@ export class Tab1Page implements OnInit {
   }
 
   onParam1Change(i: any) {
+    debugger
     const row = this.allSearch().controls[i] as FormGroup
     const menu = this.searchData.find(f => f.name.toLowerCase() === row.get('param1').value.toLowerCase())
 
@@ -534,7 +541,7 @@ export class Tab1Page implements OnInit {
     }
     row.get('param2').markAllAsTouched()
     row.get('param2').markAsDirty()
-    row.get('param2').setValue(this.param2List[i][0].name)
+    row.get('param2')?.setValue(this?.param2List[i][0]?.name)
   }
 
 
@@ -573,18 +580,22 @@ export class Tab1Page implements OnInit {
   }
 
   savePreselectForm() {
+    debugger
     this.submitted = true;
     if (!this.allSearch().valid) {
       return;
     }
 
-    let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[];
+    let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
+    // filterData[0].param1 = filterData[0].param1.toUpperCase().split(' ').join('_');
+    // filterData[0].param2 = filterData[0].param2.toUpperCase().split(' ').join('_');
+
     let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
     let messageSpan = document.getElementById("message");
     let isModified = true;
     if (every) {
       var localJSON = [];
-
+      
       const localData = localStorage.getItem("presetSearch");
       if (localData && localData != "null") {
         localJSON = JSON.parse(localData);
@@ -681,7 +692,6 @@ export class Tab1Page implements OnInit {
   }
 
   onPreselectDDLChange(e: any) {
-    debugger
     const changes = this.trackChanges(this.searchParamId);
     if (!changes) {
       if (this.searchParam && this.searchParam !== 'Select') {
@@ -709,8 +719,9 @@ export class Tab1Page implements OnInit {
         const tempArray = [] as any[];
         const currentSelection = localJSON.find(f => f.id == this.searchParamId)
 
-        currentSelection.filters.map((f, index) => {
+        currentSelection.filters?.map((f, index) => {
           const menu = this.searchData.find((fn) => fn.name.toLowerCase() === f.param1.toLowerCase());
+          // .split('_').join(' '));
 
           if (this.param2List && this.param2List.length > 0) {
             this.param2List[index] = menu.subMenu

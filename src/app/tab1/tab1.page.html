@@ -80,13 +80,13 @@
 
                       <ion-input clearInput class="input-box range" formControlName="param3"
                         [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
-                        *ngIf="allSearch().controls[i].get('param2')?.value.toLowerCase() === 'Between'.toLowerCase()" id="{{'datepicker' + i}}">
+                        *ngIf="allSearch().controls[i].get('param2')?.value?.toLowerCase() === 'Between'.toLowerCase()" id="{{'datepicker' + i}}">
                       </ion-input>
 
 
                       <ion-input clearInput type="date" class="input-box" formControlName="param3"
                         [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
-                        *ngIf="allSearch().controls[i].get('param2')?.value.toLowerCase() !== 'Between'.toLowerCase()">
+                        *ngIf="allSearch().controls[i].get('param2')?.value?.toLowerCase() !== 'Between'.toLowerCase()">
                       </ion-input>
                     </ng-template>
 

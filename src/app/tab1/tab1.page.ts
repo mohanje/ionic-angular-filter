@@ -341,12 +341,12 @@ export class Tab1Page implements OnInit {
     let messageSpan = document.getElementById("message");
     const localData: any = localStorage.getItem("presetSearch");
     const localJSON = JSON.parse(localData);
-    
-    if ( localJSON && localJSON.length > 0) {
+
+    if (localJSON && localJSON.length > 0) {
       let checkIfExist = localJSON.filter(ele => ele?.id == this.id);
       if (checkIfExist && checkIfExist?.length > 0) {
         const temp1 = localJSON[this.searchParam];
-       
+
         if (confirm(`Are you sure to delete ${this.searchParam} preset.`)) {
           let data = localJSON.filter(ele => ele?.id != this?.id);
           localStorage.setItem("presetSearch", JSON.stringify(data));
@@ -359,7 +359,7 @@ export class Tab1Page implements OnInit {
           }
           this.presetSelected = '';
           this.searchParam = '';
-          
+
           this.allSearch().clear();
           this.updatePreselectList();
         }
@@ -367,7 +367,6 @@ export class Tab1Page implements OnInit {
       else {
         messageSpan.style.color = 'red';
         this.message = 'Please select preset to delete.';
-        // : `${this.searchParam} is not present in preset list.`;
         if (this.message) {
           setTimeout(() => {
             this.message = '';
@@ -401,15 +400,7 @@ export class Tab1Page implements OnInit {
     }
   }
 
-  // re(){
-  //   const re1="";
-  //   const re2=this.searchFilterForm.value.search;
-  //   if (JSON.stringify(re1) === JSON.stringify(re2)) {
-  //     return true
-  //   }
-
   clearFilter() {
-    debugger
     this.submitted = false;
     if (!this.searchParam) {
       let isData = false
@@ -431,7 +422,7 @@ export class Tab1Page implements OnInit {
       }
     } else {
       const localData = localStorage.getItem("presetSearch");
-      if (localData && localData != "null") {
+      if (localData && localData != null) {
         localJSON = JSON.parse(localData);
       }
       if (!localJSON.find(f => f.filterName.toLowerCase() === this.searchParam) || localJSON.find(f => f.filterName.toLowerCase() === this.searchParam)?.length === 0) {
@@ -457,7 +448,7 @@ export class Tab1Page implements OnInit {
     let messageSpan = document.getElementById("message");
     var localJSON = [];
     const localData = localStorage.getItem("presetSearch");
-    if (localData && localData != "null") {
+    if (localData && localData != null) {
       localJSON = JSON.parse(localData);
     }
     let selectedData = localJSON.filter(s => s.filterName == this.searchParam);
@@ -471,14 +462,14 @@ export class Tab1Page implements OnInit {
       }
       else {
         if (JSON.stringify(temp1) !== JSON.stringify(temp2)) {
-          if(confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
+          if (confirm("Do you want to clear your unsaved changes to filter: " + this.searchParam)) {
             this.allSearch().clear();
             this.searchParam = ''
           }
           else {
             return false
           }
-          
+
         }
         else {
           return
@@ -527,9 +518,8 @@ export class Tab1Page implements OnInit {
   }
 
   onParam1Change(i: any) {
-    debugger
     const row = this.allSearch().controls[i] as FormGroup
-    const menu = this.searchData.find(f => f.name.toLowerCase() === row.get('param1').value.toLowerCase())
+    const menu = this.searchData.find(f => f.id.toLowerCase() === row.get('param1').value.toLowerCase())
 
     row.get('param2').enable()
     row.get('param3').enable()
@@ -541,13 +531,13 @@ export class Tab1Page implements OnInit {
     }
     row.get('param2').markAllAsTouched()
     row.get('param2').markAsDirty()
-    row.get('param2')?.setValue(this?.param2List[i][0]?.name)
+    row.get('param2')?.setValue(this?.param2List[i][0]?.id)
   }
 
 
   onParam2Change(i: any, data?: any) {
     const row = this.allSearch().controls[i] as FormGroup
-    if (row.value.param2.toLowerCase() === "Between".toLowerCase()) {
+    if (row.value.param2.toLowerCase() === "BETWEEN".toLowerCase()) {
       setTimeout(() => { this.createDatePicker(i, data) }, 100)
 
     }
@@ -559,45 +549,34 @@ export class Tab1Page implements OnInit {
   }
 
   isDateType(formControl) {
-    const param1Obj = this.searchData.find(f => f.name.toLocaleLowerCase()
-      === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
+    const param1Obj = this.searchData.find(f => f.id
+      === this.allSearch().controls[formControl]?.value?.param1)
     if (!param1Obj) return false
     return param1Obj.type === 'date' ? true : false
   }
-
-  // isTimeType(formControl) {
-  //   const param1Obj = this.searchData.find(f => f.name.toLocaleLowerCase()
-  //     === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
-  //   if (!param1Obj) return false
-  //   return param1Obj.type === 'time' ? true : false
-  // }
-
   isDestinationNeeded(formControl) {
-    const param1Obj = this.searchData.find(f => f.name.toLocaleLowerCase()
+    const param1Obj = this.searchData.find(f => f.id.toLowerCase()
       === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
     if (!param1Obj) return false
-    return param1Obj.name.toLowerCase() === 'Modification Date'.toLowerCase() ? true : false
+    return param1Obj.id === 'MODIFICATION_DATE' ? true : false
   }
 
   savePreselectForm() {
-    debugger
     this.submitted = true;
     if (!this.allSearch().valid) {
       return;
     }
 
     let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
-    // filterData[0].param1 = filterData[0].param1.toUpperCase().split(' ').join('_');
-    // filterData[0].param2 = filterData[0].param2.toUpperCase().split(' ').join('_');
 
     let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
     let messageSpan = document.getElementById("message");
     let isModified = true;
     if (every) {
       var localJSON = [];
-      
+
       const localData = localStorage.getItem("presetSearch");
-      if (localData && localData != "null") {
+      if (localData && localData != null) {
         localJSON = JSON.parse(localData);
       }
       if (localJSON?.length > 0 && localJSON.filter(s => s.filterName == this.searchParam)?.length > 0) {
@@ -620,11 +599,11 @@ export class Tab1Page implements OnInit {
       if (this.preSelectList.some(s => s.filterName == this.searchParam)) {
         if (isModified) {
 
-          const finalData = [{ id: Number(this.searchParamId), filterName: this.searchParam, filters: this.searchFilterForm.getRawValue()?.search }];
+          const finalData = [{ id: String(this.searchParamId), filterName: this.searchParam, filters: this.searchFilterForm.getRawValue()?.search }];
           let data = localJSON.filter(ele => ele.id != +this.searchParamId);
           data = [...data, ...finalData];
           localStorage.setItem("presetSearch", JSON.stringify(data));
-          this.updatePreselectList();
+          // this.updatePreselectList();
           messageSpan.style.color = 'green'
           this.message = "Your filter updated successfully.";
           if (this.message) {
@@ -638,7 +617,7 @@ export class Tab1Page implements OnInit {
         if (!this.preSelectList || this.preSelectList.length === 0) {
           const allFilters = []
           filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-          const finalData = { id: 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
+          const finalData = { id: this.searchParamId ? this.searchParamId : 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
           allFilters.push(finalData)
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
           this.updatePreselectList()
@@ -658,6 +637,9 @@ export class Tab1Page implements OnInit {
           allFilters.push(finalData)
           localStorage.setItem("presetSearch", JSON.stringify(allFilters));
           this.updatePreselectList()
+
+
+
           messageSpan.style.color = 'green';
           this.message = 'Your Filter stored successfully.';
           // this.searchParam = '';
@@ -678,16 +660,14 @@ export class Tab1Page implements OnInit {
   updatePreselectList() {
     var localJSON = [];
     const localData = localStorage.getItem("presetSearch");
-    if (localData && localData != "null") {
+    if (localData && localData != null) {
       localJSON = JSON.parse(localData);
       this.preSelectList = localJSON
     }
-    if(this.searchParam.toLowerCase()) {
+    if (this.searchParam.toLowerCase()) {
       this.presetSelected = localJSON.find(f => f.filterName.toLowerCase() === this.searchParam.toLowerCase()).id
       this.searchParamId = this.presetSelected;
     }
-
-   
 
   }
 
@@ -714,13 +694,13 @@ export class Tab1Page implements OnInit {
     if (this.searchParam && this.searchParam !== 'Select') {
       this.clearFormArray()
       const localData = localStorage.getItem("presetSearch");
-      if (localData && localData != "null") {
+      if (localData && localData != null) {
         var localJSON = JSON.parse(localData);
         const tempArray = [] as any[];
         const currentSelection = localJSON.find(f => f.id == this.searchParamId)
 
-        currentSelection.filters?.map((f, index) => {
-          const menu = this.searchData.find((fn) => fn.name.toLowerCase() === f.param1.toLowerCase());
+        currentSelection?.filters?.map((f, index) => {
+          const menu = this.searchData.find((fn) => fn.id.toLowerCase() === f.param1.toLowerCase());
           // .split('_').join(' '));
 
           if (this.param2List && this.param2List.length > 0) {

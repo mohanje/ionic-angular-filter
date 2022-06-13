@@ -69,6 +69,7 @@
                   <ion-col size-xs="12" size-sm="" class="input-wrapper">
 
                     <ion-input clearInput type="text" class="input-box" formControlName="param3"
+                      (focusout)="getValue($event, i)"
                       [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
                       *ngIf="!isDateType(i) else dates">
 

@@ -554,13 +554,40 @@ export class Tab1Page implements OnInit {
     if (!param1Obj) return false
     return param1Obj.type === 'date' ? true : false
   }
+
+
   isDestinationNeeded(formControl) {
+
     const param1Obj = this.searchData.find(f => f.id.toLowerCase()
       === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
     if (!param1Obj) return false
     return param1Obj.id === 'MODIFICATION_DATE' ? true : false
   }
 
+  getValue(event: any, fc: any) {
+    let param1DurationObj = this.searchFilterForm.value.search[0].param1 === 'DURATION';
+      if (param1DurationObj){
+      let duration = this.allSearch().controls[0].get('param3').value
+
+    let value = event.target.value
+
+    if (value.length === 1 && parseInt(value) != NaN) {
+
+      this.allSearch().controls[fc].get("param3").setValue(value + 'h');
+
+    } else if (value.split('h').length > 1 && value.split('m').length < 2 && parseInt(value.split('h')[1]) != NaN) {
+
+      this.allSearch().controls[fc].get("param3").setValue(value + 'm');
+
+    } else if (value.split('m').length > 1 && value.split('s').length < 2 && parseInt(value.split('m')[1]) != NaN) {
+
+      this.allSearch().controls[fc].get("param3").setValue(value + 's');
+
+    } else {
+     alert("The Duration should be HH MM SS");
+    }
+  }
+  }
   savePreselectForm() {
     this.submitted = true;
     if (!this.allSearch().valid) {
@@ -668,7 +695,6 @@ export class Tab1Page implements OnInit {
       this.presetSelected = localJSON.find(f => f.filterName.toLowerCase() === this.searchParam.toLowerCase()).id
       this.searchParamId = this.presetSelected;
     }
-
   }
 
   onPreselectDDLChange(e: any) {

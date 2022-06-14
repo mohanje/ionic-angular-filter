@@ -108,6 +108,12 @@ ion-accordion-group {
   text-align: center;
 }
 
+.modi-btn{
+  text-align: center;
+  // background-color: green;
+  margin:1rem;
+  padding :10px;
+} 
 .btn-group {
   display: flex !important;
   justify-content: space-between !important;
@@ -250,66 +256,6 @@ ion-item:not(.item-label) .sc-ion-input-md-h {
 }
 
 
-// ::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected){
-//   border-color:red;
-//   padding: 50px;
-// }
-
-// ::ng-deep .mat-calendar-body-cell-content.mat-focus-indicator, .mat-calendar-body-cell-container  {
-//   width: 10px;height: 10px; padding: 0; margin: 0;
-// }
-
-// ::ng-deep .mat-calendar-body-cell-container{
-//   width: 10px !important;
-//   height: 10px !important;
-//   background: rgb(184, 16, 16);
-//   padding:2rem !important;
-//   margin:-2rem !important;
-
-// }
-// ::ng-deep .mat-calendar-body-cell {
-//   padding: 0px !important;
-//   width: 30px !important;
-//   height: 30px !important;
-// }
-// ::ng-deep .mat-calendar-body-cell-preview {
-//   padding: 0 !important;
-// }
-// ::ng-deep .mat-calendar-body-in-range::after {
-//   padding: 0 !important;
-//   width: 10px !important;
-//   height: 10px !important;
-// }
-
-// ::ng-deep .mat-calendar-centent {
-//   width: 100px;
-//   background-color: blue;
-// }
-
-// ::ng-deep .mat-calendar {
-//   background-color: pink;
-// }
-
-// ::ng-deep .mat-datepicker-content-container {
-//   background-color: purple;
-//   z-index: 999;
-// }
-// ::deep .mat-calendar-body-cell-container {
-//   background-color: orange !important;
-// }
-
-// .mat-calendar-body-cell-container {
-//   padding: 0px !important;
-//   max-width: 0px;
-// }
-
-// ::ng-deep .mat-calender-table {
-//   width: 100px !important;
-//   height: 100px !important;
-// }
-
-
-
 label {
   display: block;
   font: 1rem 'Fira Sans', sans-serif;
@@ -373,4 +319,12 @@ label {
   .container {
     background-color: red
   }
+}
+
+ul li ul {
+  display: none; /* Hide the nested list first */
+}
+ul li.active ul {
+  display: block; /* Show the list when class 'active' is added to the li */ 
+  color: red;
 }

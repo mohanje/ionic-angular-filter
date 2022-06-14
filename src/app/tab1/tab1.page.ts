@@ -567,11 +567,11 @@ export class Tab1Page implements OnInit {
   getValue(event: any, fc: any) {
     let param1DurationObj = this.searchFilterForm.value.search[0].param1 === 'DURATION';
       if (param1DurationObj){
-      let duration = this.allSearch().controls[0].get('param3').value
+      // let duration = this.allSearch().controls[0].get('param3').value
 
     let value = event.target.value
 
-    if (value.length === 1 && parseInt(value) != NaN) {
+    if (value.length === 1 && parseInt(value) != NaN  ) {
 
       this.allSearch().controls[fc].get("param3").setValue(value + 'h');
 
@@ -584,11 +584,152 @@ export class Tab1Page implements OnInit {
       this.allSearch().controls[fc].get("param3").setValue(value + 's');
 
     } else {
-     alert("The Duration should be HH MM SS");
+     alert("The Duration should be HH MM SS and 24h clock");
     }
   }
   }
   savePreselectForm() {
+  
+    this.submitted = true;
+    if (!this.allSearch().valid) {
+      return;
+    }
+
+    let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
+
+    let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
+    let messageSpan = document.getElementById("message");
+    let isModified = true;
+            if (every) {
+                  var localJSON = [];
+
+                  const localData = localStorage.getItem("presetSearch");
+                  if (localData && localData != null) {
+                    localJSON = JSON.parse(localData);
+                  }
+        if (!this.preSelectList || this.preSelectList.length === 0) {
+          const allFilters = []
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          const finalData = { id: this.searchParamId ? this.searchParamId : 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
+          allFilters.push(finalData)
+          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
+          this.updatePreselectList()
+          messageSpan.style.color = 'green';
+          this.message = 'Your Filter stored successfully.';
+          // this.searchParam = '';
+          if (this.message) {
+            setTimeout(() => {
+              this.message = '';
+            }, 3000)
+          
+        } }
+        else {
+          // saveas
+          const allFilters = this.preSelectList
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
+          allFilters.push(finalData)
+          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
+          this.updatePreselectList()
+
+          messageSpan.style.color = 'green';
+          this.message = 'Your Filter stored successfully.';
+          // this.searchParam = '';
+          if (this.message) {
+            setTimeout(() => {
+              this.message = '';
+            }, 3000)
+          }
+        }
+      
+      }
+
+
+
+    // else {
+    //   messageSpan.style.color = 'red';
+    //   this.message = 'All fields are mandatory.';
+    // }
+  
+  }
+  saveAsNewPreset(){
+    // this.submitted = true;
+    // if (!this.allSearch().valid) {
+    //   return;
+    // }
+    let messageSpan = document.getElementById("message");
+    const localData: any = localStorage.getItem("presetSearch");
+    const localJSON = JSON.parse(localData);
+
+    if (localJSON && localJSON.length > 0) {
+      let checkIfExist = localJSON.filter(ele => ele?.id == this.id);
+      if (checkIfExist && checkIfExist?.length > 0) {
+        const temp1 = localJSON[this.searchParam];
+// 
+       
+let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
+
+    // let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
+    let messageSpan = document.getElementById("message");
+    // let isModified = true;
+
+    if (!this.preSelectList || this.preSelectList.length === 0) {
+      const allFilters = []
+      filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+      const finalData = { id: this.searchParamId ? this.searchParamId : 1, filterName: this.searchParam.concat("-Copy"), filters: this.searchFilterForm.value.search };
+      allFilters.push(finalData)
+      localStorage.setItem("presetSearch", JSON.stringify(allFilters));
+      this.updatePreselectList()
+      messageSpan.style.color = 'green';
+      this.message = 'Your Filter stored successfully.';
+      // this.searchParam = '';
+      if (this.message) {
+        setTimeout(() => {
+          this.message = '';
+        }, 3000)
+      }
+    } 
+    else {
+    const allFilters = this.preSelectList
+          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+          const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam.concat("-Copy"), filters: this.searchFilterForm.value.search };
+          allFilters.push(finalData)
+          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
+          this.updatePreselectList()
+
+          messageSpan.style.color = 'green';
+          this.message = 'Your Filter stored successfully.';
+          // this.searchParam = '';
+          if (this.message) {
+            setTimeout(() => {
+              this.message = '';
+            }, 3000)
+          }
+        }
+  
+
+// 
+      }
+      else {
+        messageSpan.style.color = 'red';
+        this.message = 'Please select preset.';
+        if (this.message) {
+          setTimeout(() => {
+            this.message = '';
+          }, 5000)
+        }
+      }
+    }
+    else {
+      messageSpan.style.color = 'red';
+      this.message = `No saved presets.`;
+    }
+  }
+
+
+// 
+    
+  updateCurrentPreset(){
     this.submitted = true;
     if (!this.allSearch().valid) {
       return;
@@ -639,51 +780,9 @@ export class Tab1Page implements OnInit {
             }, 3000)
           }
         }
-      }
-      else {
-        if (!this.preSelectList || this.preSelectList.length === 0) {
-          const allFilters = []
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-          const finalData = { id: this.searchParamId ? this.searchParamId : 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
-          allFilters.push(finalData)
-          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
-          this.updatePreselectList()
-          messageSpan.style.color = 'green';
-          this.message = 'Your Filter stored successfully.';
-          // this.searchParam = '';
-          if (this.message) {
-            setTimeout(() => {
-              this.message = '';
-            }, 3000)
-          }
-        } else {
-
-          const allFilters = this.preSelectList
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-          const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
-          allFilters.push(finalData)
-          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
-          this.updatePreselectList()
-
-
-
-          messageSpan.style.color = 'green';
-          this.message = 'Your Filter stored successfully.';
-          // this.searchParam = '';
-          if (this.message) {
-            setTimeout(() => {
-              this.message = '';
-            }, 3000)
-          }
-        }
-      }
-    }
-    else {
-      messageSpan.style.color = 'red';
-      this.message = 'All fields are mandatory.';
+      }  
     }
   }
-
   updatePreselectList() {
     var localJSON = [];
     const localData = localStorage.getItem("presetSearch");
@@ -692,7 +791,7 @@ export class Tab1Page implements OnInit {
       this.preSelectList = localJSON
     }
     if (this.searchParam.toLowerCase()) {
-      this.presetSelected = localJSON.find(f => f.filterName.toLowerCase() === this.searchParam.toLowerCase()).id
+      this.presetSelected = localJSON?.find(f => f.filterName?.toLowerCase() === this.searchParam?.toLowerCase())?.id
       this.searchParamId = this.presetSelected;
     }
   }

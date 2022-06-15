@@ -212,7 +212,13 @@ ion-item:not(.item-label) .sc-ion-input-md-h {
   width: 100%;
   border: none !important;
 }
-
+.selectbtn{
+  background-color:#008000;
+  color:#ffffff;
+  padding: 0.5rem 0.7rem;
+  border-radius:4px;
+  font-size: 14px;
+}
 
 .cdk-drag-preview {
   box-sizing: border-box;
@@ -237,7 +243,7 @@ ion-item:not(.item-label) .sc-ion-input-md-h {
 }
 
 .success {
-  color: green;
+  color: #008000;
 }
 
 .error {

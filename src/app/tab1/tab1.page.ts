@@ -300,7 +300,6 @@ export class Tab1Page implements OnInit {
     picker.on('select', (date) => {
       this.allSearch().controls[i].get('param3').setValue(date.detail.start.toLocaleString().split(",")[0] + " - " + date.detail.end.toLocaleString().split(",")[0])
     });
-
     picker.on('show', () => {
       let startDate = presetDate[0] ? new Date(presetDate[0]) : new Date()
       let endDate = presetDate[1] ? new Date(presetDate[1]) : new Date()
@@ -310,9 +309,7 @@ export class Tab1Page implements OnInit {
       }
     });
   }
-
   get f() { return this.searchFilterForm.controls; }
-
   addRow(flag?: boolean) {
     this.submitted = false
     if (flag) {
@@ -331,11 +328,8 @@ export class Tab1Page implements OnInit {
     if (confirm('Do you want remove row?')) {
       this.allSearch().removeAt(index)
       this.UpdateSearchByRemoving(index)
-
     }
   }
-
-
 
   deletePreset() {
     let messageSpan = document.getElementById("message");
@@ -345,7 +339,6 @@ export class Tab1Page implements OnInit {
     if (localJSON && localJSON.length > 0) {
       let checkIfExist = localJSON.filter(ele => ele?.id == this.id);
       if (checkIfExist && checkIfExist?.length > 0) {
-        const temp1 = localJSON[this.searchParam];
 
         if (confirm(`Are you sure to delete ${this.searchParam} preset.`)) {
           let data = localJSON.filter(ele => ele?.id != this?.id);
@@ -445,7 +438,6 @@ export class Tab1Page implements OnInit {
         }
       }
     }
-    let messageSpan = document.getElementById("message");
     var localJSON = [];
     const localData = localStorage.getItem("presetSearch");
     if (localData && localData != null) {
@@ -504,7 +496,6 @@ export class Tab1Page implements OnInit {
     return this.searchFilterForm.get('search') as FormArray;
   }
 
-
   getArray() {
     return this.searchFilterForm.get('search') as any;
   }
@@ -520,7 +511,6 @@ export class Tab1Page implements OnInit {
   onParam1Change(i: any) {
     const row = this.allSearch().controls[i] as FormGroup
     const menu = this.searchData.find(f => f.id.toLowerCase() === row.get('param1').value.toLowerCase())
-
     row.get('param2').enable()
     row.get('param3').enable()
     row.get('param4').enable()
@@ -534,18 +524,11 @@ export class Tab1Page implements OnInit {
     row.get('param2')?.setValue(this?.param2List[i][0]?.id)
   }
 
-
   onParam2Change(i: any, data?: any) {
     const row = this.allSearch().controls[i] as FormGroup
     if (row.value.param2.toLowerCase() === "BETWEEN".toLowerCase()) {
       setTimeout(() => { this.createDatePicker(i, data) }, 100)
-
     }
-  }
-
-
-  getClass(form: any, key: any) {
-    return this
   }
 
   isDateType(formControl) {
@@ -555,9 +538,7 @@ export class Tab1Page implements OnInit {
     return param1Obj.type === 'date' ? true : false
   }
 
-
   isDestinationNeeded(formControl) {
-
     const param1Obj = this.searchData.find(f => f.id.toLowerCase()
       === this.allSearch().controls[formControl]?.value?.param1?.toLowerCase())
     if (!param1Obj) return false
@@ -566,189 +547,146 @@ export class Tab1Page implements OnInit {
 
   getValue(event: any, fc: any) {
     let param1DurationObj = this.searchFilterForm.value.search[0].param1 === 'DURATION';
-      if (param1DurationObj){
-      // let duration = this.allSearch().controls[0].get('param3').value
+    if (param1DurationObj) {
 
-    let value = event.target.value
-
-    if (value.length === 1 && parseInt(value) != NaN  ) {
-
-      this.allSearch().controls[fc].get("param3").setValue(value + 'h');
-
-    } else if (value.split('h').length > 1 && value.split('m').length < 2 && parseInt(value.split('h')[1]) != NaN) {
-
-      this.allSearch().controls[fc].get("param3").setValue(value + 'm');
-
-    } else if (value.split('m').length > 1 && value.split('s').length < 2 && parseInt(value.split('m')[1]) != NaN) {
-
-      this.allSearch().controls[fc].get("param3").setValue(value + 's');
-
-    } else {
-     alert("The Duration should be HH MM SS and 24h clock");
+      let value = event.target.value
+      if (value.length === 1 && parseInt(value) != NaN) {
+        this.allSearch().controls[fc].get("param3").setValue(value + 'h');
+      } else if (value.split('h').length > 1 && value.split('m').length < 2 && parseInt(value.split('h')[1]) != NaN) {
+        this.allSearch().controls[fc].get("param3").setValue(value + 'm');
+      } else if (value.split('m').length > 1 && value.split('s').length < 2 && parseInt(value.split('m')[1]) != NaN) {
+        this.allSearch().controls[fc].get("param3").setValue(value + 's');
+      } else {
+        alert("The Duration should be HH MM SS and 24h clock");
+      }
     }
   }
-  }
+
   savePreselectForm() {
-  
     this.submitted = true;
     if (!this.allSearch().valid) {
       return;
     }
-
     let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
-
     let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
-    let messageSpan = document.getElementById("message");
-    let isModified = true;
-            if (every) {
-                  var localJSON = [];
-
-                  const localData = localStorage.getItem("presetSearch");
-                  if (localData && localData != null) {
-                    localJSON = JSON.parse(localData);
-                  }
-        if (!this.preSelectList || this.preSelectList.length === 0) {
-          const allFilters = []
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-          const finalData = { id: this.searchParamId ? this.searchParamId : 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
-          allFilters.push(finalData)
-          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
-          this.updatePreselectList()
-          messageSpan.style.color = 'green';
-          this.message = 'Your Filter stored successfully.';
-          // this.searchParam = '';
-          if (this.message) {
-            setTimeout(() => {
-              this.message = '';
-            }, 3000)
-          
-        } }
-        else {
-          // saveas
-          const allFilters = this.preSelectList
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-          const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
-          allFilters.push(finalData)
-          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
-          this.updatePreselectList()
-
-          messageSpan.style.color = 'green';
-          this.message = 'Your Filter stored successfully.';
-          // this.searchParam = '';
-          if (this.message) {
-            setTimeout(() => {
-              this.message = '';
-            }, 3000)
-          }
-        }
-      
-      }
-
-
-
-    // else {
-    //   messageSpan.style.color = 'red';
-    //   this.message = 'All fields are mandatory.';
-    // }
-  
-  }
-  saveAsNewPreset(){
-    // this.submitted = true;
-    // if (!this.allSearch().valid) {
-    //   return;
-    // }
-    let messageSpan = document.getElementById("message");
-    const localData: any = localStorage.getItem("presetSearch");
-    const localJSON = JSON.parse(localData);
-
-    if (localJSON && localJSON.length > 0) {
-      let checkIfExist = localJSON.filter(ele => ele?.id == this.id);
-      if (checkIfExist && checkIfExist?.length > 0) {
-        const temp1 = localJSON[this.searchParam];
-// 
-       
-let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
-
-    // let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
     let messageSpan = document.getElementById("message");
     // let isModified = true;
-
-    if (!this.preSelectList || this.preSelectList.length === 0) {
-      const allFilters = []
-      filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-      const finalData = { id: this.searchParamId ? this.searchParamId : 1, filterName: this.searchParam.concat("-Copy"), filters: this.searchFilterForm.value.search };
-      allFilters.push(finalData)
-      localStorage.setItem("presetSearch", JSON.stringify(allFilters));
-      this.updatePreselectList()
-      messageSpan.style.color = 'green';
-      this.message = 'Your Filter stored successfully.';
-      // this.searchParam = '';
-      if (this.message) {
-        setTimeout(() => {
-          this.message = '';
-        }, 3000)
-      }
-    } 
-    else {
-    const allFilters = this.preSelectList
-          filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
-          const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam.concat("-Copy"), filters: this.searchFilterForm.value.search };
-          allFilters.push(finalData)
-          localStorage.setItem("presetSearch", JSON.stringify(allFilters));
-          this.updatePreselectList()
-
-          messageSpan.style.color = 'green';
-          this.message = 'Your Filter stored successfully.';
-          // this.searchParam = '';
-          if (this.message) {
-            setTimeout(() => {
-              this.message = '';
-            }, 3000)
-          }
-        }
-  
-
-// 
-      }
-      else {
-        messageSpan.style.color = 'red';
-        this.message = 'Please select preset.';
-        if (this.message) {
-          setTimeout(() => {
-            this.message = '';
-          }, 5000)
-        }
-      }
-    }
-    else {
-      messageSpan.style.color = 'red';
-      this.message = `No saved presets.`;
-    }
-  }
-
-
-// 
-    
-  updateCurrentPreset(){
-    this.submitted = true;
-    if (!this.allSearch().valid) {
-      return;
-    }
-
-    let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
-
-    let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
-    let messageSpan = document.getElementById("message");
-    let isModified = true;
     if (every) {
       var localJSON = [];
-
       const localData = localStorage.getItem("presetSearch");
       if (localData && localData != null) {
         localJSON = JSON.parse(localData);
       }
       if (localJSON?.length > 0 && localJSON.filter(s => s.filterName == this.searchParam)?.length > 0) {
-        const temp1 = localJSON.map((data) => data?.id == this.id ? data?.filters : '')[0];
+        const temp1 = localJSON.map((data) => data?.id === this.id ? data?.filters : '')[0];
+        const temp2 = this.searchFilterForm.value.search;
+        if (JSON.stringify(temp1) == JSON.stringify(temp2)) {
+          // messageSpan.style.color = 'green';
+          this.message = 'Your Filter stored successfully';
+          if (this.message) {
+            setTimeout(() => {
+              this.message = '';
+            }, 3000)
+          }
+          return
+        } else {
+          alert('Preset already exists.');
+          return false;
+        }
+      }
+      if (!this.preSelectList || this.preSelectList.length === 0) {
+        const allFilters = []
+        filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+        const finalData = { id: this.searchParamId ? this.searchParamId : 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
+        allFilters.push(finalData)
+        localStorage.setItem("presetSearch", JSON.stringify(allFilters));
+        this.updatePreselectList()
+        messageSpan.style.color = 'green';
+        this.message = 'Your Filter stored successfully.';
+        // this.searchParam = '';
+        if (this.message) {
+          setTimeout(() => {
+            this.message = '';
+          }, 3000)
+        }
+      }
+      else {
+        const allFilters = this.preSelectList
+        filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+        const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: this.searchParam, filters: this.searchFilterForm.value.search };
+        allFilters.push(finalData)
+        localStorage.setItem("presetSearch", JSON.stringify(allFilters));
+        this.updatePreselectList()
+        messageSpan.style.color = 'green';
+        this.message = 'Your Filter stored successfully.';
+        // this.searchParam = '';
+        if (this.message) {
+          setTimeout(() => {
+            this.message = '';
+          }, 3000)
+        }
+      }
+    }
+  }
+  saveAsNewPreset() {
+    const localData: any = localStorage.getItem("presetSearch");
+    const localJSON = JSON.parse(localData);
+    if (localJSON && localJSON.length > 0) {
+      let checkIfExist = localJSON.filter(ele => ele?.id == this.id);
+      if (checkIfExist || checkIfExist?.length > 0) {
+        let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
+        let messageSpan = document.getElementById("message");
+        let presetName = this.searchParam
+        const allSameNameKeys = localJSON.filter(d => d.filterName.search(this.searchParam) > -1)
+        if (allSameNameKeys) {
+          const allKeys = allSameNameKeys.map(m => m.filterName)
+
+          if (allKeys[allKeys.length - 1].split("_").length === 1) {
+            presetName += "_copy"
+          }
+          if (allKeys[allKeys.length - 1].split("_").length > 1 && allKeys[allKeys.length - 1].split("_")[1].length === 4) {
+            presetName = allKeys[allKeys.length - 1].split("_")[0] + "_copy1"
+          }
+          if (allKeys[allKeys.length - 1].split("_").length > 1 && allKeys[allKeys.length - 1].split("_")[1].length > 4) {
+            let newIndex = allKeys[allKeys.length - 1][allKeys[allKeys.length - 1].length - 1]
+            newIndex++
+            presetName = allKeys[allKeys.length - 1].split("_")[0] + "_copy" + newIndex
+          }
+        }
+        const allFilters = this.preSelectList
+        filterData = filterData.filter(data => data?.param1 && data?.param2 && data?.param3);
+        const finalData = { id: allFilters[allFilters.length - 1].id + 1, filterName: presetName, filters: this.searchFilterForm.value.search };
+        allFilters.push(finalData)
+        localStorage.setItem("presetSearch", JSON.stringify(allFilters));
+        this.updatePreselectList()
+        messageSpan.style.color = 'green';
+        this.message = 'Your Filter stored successfully.';
+        this.presetSelected = localJSON?.find(f => f.filterName?.toLowerCase() === this.searchParam?.toLowerCase())?.id+1
+        this.searchParam = presetName;
+          setTimeout(() => {
+            this.message = '';
+          }, 3000)
+      }
+    }
+  }
+
+  updateCurrentPreset() {
+    this.submitted = true;
+    if (!this.allSearch().valid) {
+      return;
+    }
+    let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterModel[]
+    let every = filterData.every((m) => m.param1 !== '' && m.param2 !== '' && m.param3 !== '');
+    let messageSpan = document.getElementById("message");
+    let isModified = true;
+    if (every) {
+      var localJSON = [];
+      const localData = localStorage.getItem("presetSearch");
+      if (localData && localData != null) {
+        localJSON = JSON.parse(localData);
+      }
+      if (localJSON?.length > 0 && localJSON.filter(s => s.filterName == this.searchParam)?.length > 0) {
+        const temp1 = localJSON.map((data) => data?.id === this.id ? data?.filters : '')[0];
         const temp2 = this.searchFilterForm.value.search;
         if (JSON.stringify(temp1) == JSON.stringify(temp2)) {
           messageSpan.style.color = 'green';
@@ -763,15 +701,13 @@ let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterMode
           isModified = confirm("Your are updating the current filter: " + this.searchParam + " Please confirm");
         }
       }
-
       if (this.preSelectList.some(s => s.filterName == this.searchParam)) {
         if (isModified) {
-
           const finalData = [{ id: String(this.searchParamId), filterName: this.searchParam, filters: this.searchFilterForm.getRawValue()?.search }];
           let data = localJSON.filter(ele => ele.id != +this.searchParamId);
           data = [...data, ...finalData];
           localStorage.setItem("presetSearch", JSON.stringify(data));
-          // this.updatePreselectList();
+          this.updatePreselectList();
           messageSpan.style.color = 'green'
           this.message = "Your filter updated successfully.";
           if (this.message) {
@@ -780,9 +716,11 @@ let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterMode
             }, 3000)
           }
         }
-      }  
+      }
     }
   }
+
+
   updatePreselectList() {
     var localJSON = [];
     const localData = localStorage.getItem("presetSearch");
@@ -795,6 +733,7 @@ let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterMode
       this.searchParamId = this.presetSelected;
     }
   }
+
 
   onPreselectDDLChange(e: any) {
     const changes = this.trackChanges(this.searchParamId);
@@ -827,7 +766,6 @@ let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterMode
         currentSelection?.filters?.map((f, index) => {
           const menu = this.searchData.find((fn) => fn.id.toLowerCase() === f.param1.toLowerCase());
           // .split('_').join(' '));
-
           if (this.param2List && this.param2List.length > 0) {
             this.param2List[index] = menu.subMenu
           } else {
@@ -851,7 +789,6 @@ let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterMode
         this.allSearch().clear();
       }
     }
-
   }
 
   trackChanges = (param: any) => {
@@ -873,7 +810,6 @@ let filterData: FilterModel[] = this.searchFilterForm.value.search as FilterMode
     }
     return true;
   }
-
 
   drop(event: CdkDragDrop<any>) {
     const previous = this.allSearch().at(event.previousIndex);

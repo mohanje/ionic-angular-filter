@@ -25,7 +25,7 @@
           <ion-row>
             <ion-col size="12">
               <ion-text class="no-presets">
-                No saved Presests
+                No saved Presets
               </ion-text>
             </ion-col>
           </ion-row>
@@ -67,7 +67,6 @@
                     </select>
                   </ion-col>
                   <ion-col size-xs="12" size-sm="" class="input-wrapper">
-
                     <ion-input clearInput type="text" class="input-box" formControlName="param3"
                       (focusout)="getValue($event, i)"
                       [ngClass]="!allSearch().controls[i].get('param3')?.valid && submitted ? 'error' : ''"
@@ -129,47 +128,24 @@
                 </ion-input>
               </ion-col>
               <ion-col size-xs="3" size-sm="2" class="save-btn">
-                <ion-button [disabled]="searchParam?.length < 1" (click)="savePreselectForm()" class="save">
+                <ion-button *ngIf="!presetSelected" [disabled]="searchParam?.length < 1" (click)="savePreselectForm()"
+                  class="save">
                   Save</ion-button>
-                  
+
               </ion-col>
 
               <ion-col size-xs="3" size-sm="2" class="modi-btn">
-              <!-- <ion-button color="success" [disabled]="!presetSelected">
-                <ion-label>Save as</ion-label>
-                <ion-select (ionChange)="saveModificationForm($event)">
-                  <ion-select-option value="modification">Modification</ion-select-option>
-                  <ion-select-option value="saveNew">Save As New Preset</ion-select-option>
-                </ion-select>
-              </ion-button> -->
-
-              <!-- <select name="cars" id="cars">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-            </select> -->
-
-            <!-- <ul>
-              <li>Coffee</li>
-              <li>Save as
-                <ul>
-                <li>Modification</li>
-                <li>Save as new Preset</li>
-                </ul>
-              </li>
-            </ul> -->
-
-            <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                Save As
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdown">
-                <li class="dropdown-item" (click)="saveAsNewPreset()">Save As New Preset</li>
-                <li class="dropdown-item"(click)="updateCurrentPreset()" >Update Current Preset</li>
-              </ul>
-            </div>
-
-            </ion-col>
-
+                <div class="dropdown" *ngIf="presetSelected">
+                  <button class="selectbtn  btn-primary dropdown-toggle" type="button" id="dropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Update
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdown">
+                    <li class="dropdown-item" (click)="saveAsNewPreset()">Save As New Preset</li>
+                    <li class="dropdown-item" (click)="updateCurrentPreset()">Update Current Preset</li>
+                  </ul>
+                </div>
+              </ion-col>
               <ion-col class="error-col" size-xs="4" size-sm="3">
                 <ion-text><span class="message" id="message">{{message}}</span></ion-text>
               </ion-col>

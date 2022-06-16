@@ -14,8 +14,8 @@
           <ion-col size="6">
             <select class="select-class" [(ngModel)]="presetSelected" (change)="onPreselectDDLChange($event)">
               <option class="select-options" value="" selected>Select</option>
-              <option class="select-options" [value]="pre?.id" *ngFor="let pre  of preSelectList; let i2 = index">
-                {{pre?.filterName}}
+              <option class="select-options" [value]="pre?.id" *ngFor="let pre of preSelectList; let i2 = index">
+                {{pre?.filterName}} 
               </option>
             </select>
           </ion-col>

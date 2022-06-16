@@ -445,8 +445,16 @@ export class Tab1Page implements OnInit {
     }
     let selectedData = localJSON.filter(s => s.filterName == this.searchParam);
     if (localJSON?.length > 0 && selectedData && selectedData?.length > 0) {
-      const temp1 = selectedData[0]?.filters;
+      let temp1 = selectedData[0]?.filters;
       const temp2 = this.searchFilterForm.value.search;
+
+      for (var i = 0, len = temp1.length; i < len; i++) {
+        if(temp1[i].param4 == '') {
+          delete temp1[i].param4;
+        }
+      }
+
+      console.log(JSON.stringify(temp1) == JSON.stringify(temp2))
       if (JSON.stringify(temp1) == JSON.stringify(temp2)) {
         this.allSearch().clear();
         this.searchParam = ''
@@ -661,11 +669,11 @@ export class Tab1Page implements OnInit {
         this.updatePreselectList()
         messageSpan.style.color = 'green';
         this.message = 'Your Filter stored successfully.';
-        this.presetSelected = localJSON?.find(f => f.filterName?.toLowerCase() === this.searchParam?.toLowerCase())?.id+1
+        this.presetSelected = localJSON?.find(f => f.filterName?.toLowerCase() === this.searchParam?.toLowerCase())?.id + 1
         this.searchParam = presetName;
-          setTimeout(() => {
-            this.message = '';
-          }, 3000)
+        setTimeout(() => {
+          this.message = '';
+        }, 3000)
       }
     }
   }
@@ -736,7 +744,9 @@ export class Tab1Page implements OnInit {
 
 
   onPreselectDDLChange(e: any) {
+    debugger
     const changes = this.trackChanges(this.searchParamId);
+
     if (!changes) {
       if (this.searchParam && this.searchParam !== 'Select') {
         if (!confirm("Do you want to discard the current filter changes")) {
@@ -792,6 +802,7 @@ export class Tab1Page implements OnInit {
   }
 
   trackChanges = (param: any) => {
+    debugger
     if (!param) return true
     const localData = localStorage.getItem("presetSearch");
     var localJSON = JSON.parse(localData);
@@ -801,7 +812,25 @@ export class Tab1Page implements OnInit {
       return false
     }
     if (data?.filters?.length === this.allSearch().controls.length) {
-      if (JSON.stringify(data?.filters) !== JSON.stringify(this.allSearch().getRawValue())) {
+      console.log(this.allSearch().getRawValue())
+      console.log(data?.filters)
+      const temp1 = this.allSearch().getRawValue();
+      const temp2 = data?.filters;
+
+      for (var i = 0, len1 = temp1.length; i < len1; i++) {
+        if(temp1[i].param4 == '') {
+          delete temp1[i].param4;
+        }
+      }
+      for (var i = 0, len2 = temp2.length; i < len2; i++) {
+        if(temp2[i].param4 == '') {
+          delete temp2[i].param4;
+        }
+      }
+      console.log(temp1)
+      console.log(temp2)
+
+      if (JSON.stringify(temp1) !== JSON.stringify(temp2)) {
         return false
       }
       else {

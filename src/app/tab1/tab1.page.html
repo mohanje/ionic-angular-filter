@@ -15,7 +15,7 @@
             <select class="select-class" [(ngModel)]="presetSelected" (change)="onPreselectDDLChange($event)">
               <option class="select-options" value="" selected>Select</option>
               <option class="select-options" [value]="pre?.id" *ngFor="let pre of preSelectList; let i2 = index">
-                {{pre?.filterName}} 
+                {{pre?.filterName}}
               </option>
             </select>
           </ion-col>
@@ -51,7 +51,7 @@
                     <select class="select-class" formControlName="param1"
                       [ngClass]="(!allSearch().controls[i].get('param1').valid && submitted) ? 'error' : ''"
                       (change)="onParam1Change(i)" onchange="">
-                      <option class="select-options" value="" selected>select</option>
+                      <option class="select-options" value="select" selected>select</option>
                       <option class="select-options" [value]="param1?.id"
                         *ngFor="let param1 of searchData; let i= index">{{param1?.name}}
 
@@ -59,7 +59,7 @@
                     </select>
                   </ion-col>
                   <ion-col size-xs="12" size-sm="">
-                    <select class="select-class" formControlName="param2" onselect="" (change)="onParam2Change(i)"
+                    <select class="select-class"  [attr.disabled]="isParam2Select? '':null" formControlName="param2" onselect="" (change)="onParam2Change(i)"
                       [ngClass]="!allSearch().controls[i].get('param2')?.valid && submitted ? 'error' : ''">
                       <option class="select-options" [value]="p2.id" *ngFor="let p2  of param2List[i];">
                         {{p2.name}}
